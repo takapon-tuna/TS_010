@@ -1,0 +1,4 @@
+*.cpp text working-tree-encoding=SJIS eol=lf
+*.h text working-tree-encoding=SJIS eol=lf
+*.hlsl text working-tree-encoding=SJIS eol=lf
+*.hlsli text working-tree-encoding=SJIS eol=lf
