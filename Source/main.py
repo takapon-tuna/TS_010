@@ -24,6 +24,9 @@ def main():
     # クロックオブジェクトの作成
     clock = pygame.time.Clock()
 
+    # テキストエントリーの初期化
+    text_entry = None
+
     # ゲームループ
     while True:
         # 経過時間の計算
@@ -42,6 +45,7 @@ def main():
                     text_entry = pygame_gui.elements.UITextEntryLine(pygame.Rect((0, 0), (200, 50)),
                                                                      manager=manager,
                                                                      container=dialog_window)
+                    text_entry.set_text('名前を入れて')
                 else:
                     game_state = 'gameplay'
         elif game_state == 'gameplay':
@@ -65,7 +69,7 @@ def main():
             # UIイベントの処理
             if event.type == pygame.USEREVENT:
                 if event.user_type == pygame_gui.UI_TEXT_ENTRY_FINISHED:
-                    if event.ui_element == text_entry:
+                    if text_entry is not None and event.ui_element == text_entry:
                         player_name = event.text
                         # 名前を保存
                         player_name_path.parent.mkdir(
