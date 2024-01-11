@@ -7,7 +7,7 @@ def show_game_screen(screen):
     font = pygame.font.Font(None, 72)
 
     # テキストの設定
-    text = font.render("Game", True, (255, 255, 255))
+    text = font.render("Game", True, (144, 238, 144))
 
     # テキストの位置
     text_rect = text.get_rect(
@@ -21,3 +21,11 @@ def show_game_screen(screen):
 
     # 画面を更新
     pygame.display.flip()
+
+    # スペースキーが押されたかどうかをチェック
+    for event in pygame.event.get():
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                return True
+
+    return False
