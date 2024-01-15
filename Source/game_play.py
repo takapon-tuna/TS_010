@@ -1,5 +1,6 @@
 # TS_010/Source/game_play.py
 import pygame
+from back_ground import draw_background  # 背景
 
 
 class Player(pygame.sprite.Sprite):
@@ -21,8 +22,8 @@ def show_game_screen(screen, event):
     text_rect = text.get_rect(
         center=(screen.get_width() / 2, screen.get_height()/2))
 
-    # 画面を薄い水色に
-    screen.fill((173, 216, 230))
+    # 背景を描画
+    draw_background(screen)
 
     # テキストを描画
     screen.blit(text, text_rect)
