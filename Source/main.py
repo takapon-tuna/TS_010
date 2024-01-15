@@ -33,6 +33,12 @@ def main():
                 pygame.quit()
                 return
 
+            # エスケープキーでゲーム終了
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    return
+
             manager.process_events(event)
 
             # ゲームの状態に応じた処理
