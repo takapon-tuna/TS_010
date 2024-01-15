@@ -2,7 +2,7 @@
 import pygame
 
 
-def show_title_screen(screen):
+def show_title_screen(screen, event):
     # フォントの設定
     font = pygame.font.Font(None, 72)
 
@@ -22,10 +22,9 @@ def show_title_screen(screen):
     # 画面を更新
     pygame.display.flip()
 
-    # スペースキーが押されたかどうかをチェック
-    for event in pygame.event.get():
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE:
-                return True
+   # スペースキーが押されたかどうかをチェック
+    if event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_SPACE:
+            return True
 
     return False
