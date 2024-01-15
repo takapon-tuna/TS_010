@@ -22,8 +22,8 @@ def show_game_screen(screen, event):
     text_rect = text.get_rect(
         center=(screen.get_width() / 2, screen.get_height()/2))
 
-    # 背景を描画
-    draw_background(screen)
+    # 背景を描画し、ゲームエリアのサイズを取得
+    game_area_width, game_area_height = draw_background(screen)
 
     # テキストを描画
     screen.blit(text, text_rect)

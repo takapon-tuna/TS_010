@@ -25,6 +25,9 @@
     <Compile Include="Source\back_ground.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Source\ball_class.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Source\cloud.py">
       <SubType>Code</SubType>
     </Compile>
