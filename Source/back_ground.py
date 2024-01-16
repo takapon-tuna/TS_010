@@ -27,8 +27,10 @@ def draw_background(screen):
     # 右側の長方形を描画
     pygame.draw.rect(screen, rect_color, pygame.Rect(
         screen_width - rect_width, 0, rect_width, rect_height))
-    # ゲーム操作部分のサイズを計算
+
+    # ゲーム操作部分の開始位置とサイズを計算
+    game_area_start = rect_width
     game_area_width = screen_width - 2 * rect_width
     game_area_height = screen_height
 
-    return game_area_width, game_area_height
+    return game_area_start, game_area_width, game_area_height

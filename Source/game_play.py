@@ -24,10 +24,12 @@ def show_game_screen(screen, event):
         center=(screen.get_width() / 2, screen.get_height()/2))
 
     # 背景を描画し、ゲームエリアのサイズを取得
-    game_area_width, game_area_height = draw_background(screen)
+    game_area_start, game_area_width, game_area_height = draw_background(
+        screen)
 
-    # 白い球を作成
-    ball = Ball(game_area_width, game_area_height // 2, -2, 0)
+    # 白いボールを生成
+    ball = Ball(game_area_start + game_area_width //
+                2, game_area_height // 2, 5)
 
     # ゲームループ
     while True:
