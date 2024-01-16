@@ -39,8 +39,17 @@ def show_game_screen(screen, event):
                 if event.key == pygame.K_SPACE:
                     return True
 
-        # 白い球を動かす
-        ball.move(game_area_width, game_area_height)
+        # 現在押されているすべてのキーを取得し、矢印キーを押したままにすると移動します。
+        keys = pygame.key.get_pressed()
+        ball.move(
+            up=keys[pygame.K_UP],
+            down=keys[pygame.K_DOWN],
+            left=keys[pygame.K_LEFT],
+            right=keys[pygame.K_RIGHT],
+            game_area_start=game_area_start,
+            game_area_width=game_area_width,
+            game_area_height=game_area_height
+        )
 
         # 白い球を描画
         ball.draw(screen)
