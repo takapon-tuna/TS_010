@@ -1,5 +1,6 @@
 # TS_010/Source/game_play.py
 import pygame
+import time
 from back_ground import draw_background  # 背景
 from ball_class import Ball  # Ball
 
@@ -7,8 +8,8 @@ from ball_class import Ball  # Ball
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load('player.png')
-        self.rect = self.image.get_rect()
+       # self.image = pygame.image.load('player.png')
+       # self.rect = self.image.get_rect()
         self.health = 30  # プレイヤーの体力を30に設定
 
 
@@ -23,9 +24,17 @@ def show_game_screen(screen, event):
     text_rect = text.get_rect(
         center=(screen.get_width() / 2, screen.get_height()/2))
 
+    # プレイヤーを生成
+    player = Player()
+
+    # ゲーム開始時刻を記録
+    start_time = time.time()
+
+    elapsed_time = 0  # 経過時間を初期化
+
     # 背景を描画し、ゲームエリアのサイズを取得
     game_area_start, game_area_width, game_area_height = draw_background(
-        screen)
+        screen, player.health, elapsed_time)
 
     # 白いボールを生成
     ball = Ball(game_area_start + game_area_width //
@@ -33,6 +42,19 @@ def show_game_screen(screen, event):
 
     # ゲームループ
     while True:
+        # 経過時間を計算
+        elapsed_time = time.time() - start_time
+
+        # デバッグ用に時間を表示
+        debug_font = pygame.font.Font(None, 36)  # フォントを設定
+        debug_text = debug_font.render(
+            f"Elapsed time: {elapsed_time:.2f}", True, (0, 0, 0))  # テキストを設定
+        screen.blit(debug_text, (10, 10))  # テキストを描画
+
+        # 背景を描画し、ゲームエリアのサイズを取得
+        game_area_start, game_area_width, game_area_height = draw_background(
+            screen, player.health, elapsed_time)
+
         for event in pygame.event.get():
             # スペースキーが押されたかどうかをチェック
             if event.type == pygame.KEYDOWN:
@@ -50,10 +72,6 @@ def show_game_screen(screen, event):
             game_area_width=game_area_width,
             game_area_height=game_area_height
         )
-
-        # 背景を再描画
-        game_area_start, game_area_width, game_area_height = draw_background(
-            screen)
 
         # 白い球を描画
         ball.draw(screen)
