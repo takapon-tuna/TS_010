@@ -51,6 +51,10 @@ def show_game_screen(screen, event):
             game_area_height=game_area_height
         )
 
+        # 背景を再描画
+        game_area_start, game_area_width, game_area_height = draw_background(
+            screen)
+
         # 白い球を描画
         ball.draw(screen)
 

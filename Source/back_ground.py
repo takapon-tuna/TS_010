@@ -1,11 +1,13 @@
 # TS_010/Source/back_ground.py
 import pygame
 
+# 背景画像をロード(ゲーム開始時に一度だけ)
+bg_image = pygame.image.load('assets/bg/sky.png')
+# 別背景（テスト）
+bg_test_image = pygame.image.load('assets/concept_art/UI.png')
+
 
 def draw_background(screen):
-
-    # 背景画像をロード
-    bg_image = pygame.image.load('assets/bg/sky.png')
 
     # 画面に背景画像を描画
     screen.blit(bg_image, (0, 0))
