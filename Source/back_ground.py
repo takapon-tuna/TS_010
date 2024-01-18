@@ -8,13 +8,13 @@ bg_test_image = pygame.image.load('assets/concept_art/UI.png')
 
 # じじい(HP)をロード
 hp_g_normal_image = pygame.image.load('assets/ui/g.png')
-# hp_g_high_image = pygame.image.load('path')
-# hp_g_low_image = pygame.image.load('path')
+hp_g_high_image = pygame.image.load('assets/ui/g_happy.png')
+hp_g_low_image = pygame.image.load('assets/ui/g_sad.png')
 
 # じじい(HP)のサイズを取得
 hp_normal_width, hp_normal_height = hp_g_normal_image.get_size()
-# high_width, high_height = hp_g_high_image.get_size()
-# low_width, low_height = hp_g_low_image.get_size()
+hp_high_width, hp_high_height = hp_g_high_image.get_size()
+hp_low_width, hp_low_height = hp_g_low_image.get_size()
 
 # じじい(ベンチ)をロード
 g_benchi_summer_image = pygame.image.load('assets/ui/g_benchi.png')
@@ -35,10 +35,10 @@ def draw_background(screen, hp, time_elapsed):
     # じじい(HP)のサイズを変更
     g_image_normal_scaled = pygame.transform.scale(
         hp_g_normal_image, (hp_normal_width, hp_normal_height))
-    # g_image_high_scaled = pygame.transform.scale(
-    #     hp_g_high_image, (high_width, high_height))
-    # g_image_low_scaled = pygame.transform.scale(
-    #     hp_g_low_image, (low_width, low_height))
+    g_image_high_scaled = pygame.transform.scale(
+        hp_g_high_image, (hp_high_width, hp_high_height))
+    g_image_low_scaled = pygame.transform.scale(
+        hp_g_low_image, (hp_low_width, hp_low_height))
 
     # じじい(ベンチ)のサイズを0.8倍に変更
     g_benchi_summer_scaled = pygame.transform.scale(
@@ -55,13 +55,12 @@ def draw_background(screen, hp, time_elapsed):
         0, 0, rect_width, rect_height))
 
     # HPに応じて左上の画像を切り替え
-    if hp > 20:  # HPが20以上の場合
+    if hp > 20:  # HPが21以上の場合
+        screen.blit(g_image_high_scaled, (rect_width // 4, 50))
+    elif hp > 10:  # HPが11以上の場合
         screen.blit(g_image_normal_scaled, (rect_width // 4, 50))
-    elif hp > 10:  # HPが10以上の場合
-        # screen.blit(g_image_normal_scaled, (1, 0))
-        # else:  # HPが10未満の場合
-        # screen.blit(g_low_scaled, (1, 0))
-        pass
+    else:  # HPが10以下の場合
+        screen.blit(g_image_low_scaled, (rect_width // 4, 50))
 
     # 時間が０秒以上なら表示し続ける
     if time_elapsed >= 0:
