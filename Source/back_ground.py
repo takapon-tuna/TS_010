@@ -40,9 +40,9 @@ def draw_background(screen, hp, time_elapsed):
     # g_image_low_scaled = pygame.transform.scale(
     #     hp_g_low_image, (low_width, low_height))
 
-    # じじい(ベンチ)のサイズ変更
+    # じじい(ベンチ)のサイズを0.8倍に変更
     g_benchi_summer_scaled = pygame.transform.scale(
-        g_benchi_summer_image, (rect_width, rect_height))
+        g_benchi_summer_image, (int(bc_summer_width * 0.8), int(bc_summer_height * 0.8)))
 
     # 画面に背景画像を描画
     screen.blit(bg_image, (0, 0))
@@ -56,7 +56,7 @@ def draw_background(screen, hp, time_elapsed):
 
     # HPに応じて左上の画像を切り替え
     if hp > 20:  # HPが20以上の場合
-        screen.blit(g_image_normal_scaled, (1, 0))
+        screen.blit(g_image_normal_scaled, (rect_width // 4, 50))
     elif hp > 10:  # HPが10以上の場合
         # screen.blit(g_image_normal_scaled, (1, 0))
         # else:  # HPが10未満の場合
@@ -65,7 +65,7 @@ def draw_background(screen, hp, time_elapsed):
 
     # 時間が０秒以上なら表示し続ける
     if time_elapsed >= 0:
-        screen.blit(g_benchi_summer_scaled, (1, rect_height // 2))
+        screen.blit(g_benchi_summer_scaled, (1, rect_height // 2 + 50))
 
     # 右側の長方形を描画
     pygame.draw.rect(screen, rect_color, pygame.Rect(
