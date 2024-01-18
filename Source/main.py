@@ -45,11 +45,16 @@ def main():
             if game_state == 'title':
                 # タイトル画面の処理
                 if show_title_screen(screen, event):
-                    game_state = 'gameplay'
-            elif game_state == 'gameplay':
+                    game_state = 'game_play'
+            elif game_state == 'game_play':
                 # ゲームプレイの処理
-                if show_game_screen(screen, event):
+                result = show_game_screen(screen, event)
+                # if show_game_screen(screen, event):
+                if result == True:
                     game_state = 'game_over'
+                elif result == 'quit':
+                    pygame.quit()
+                    return
             elif game_state == 'game_over':
                 # ゲームオーバーの処理
                 if show_game_over(screen, event):

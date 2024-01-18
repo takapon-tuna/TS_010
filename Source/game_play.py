@@ -62,6 +62,9 @@ def show_game_screen(screen, event):
                     return True
 
         # 現在押されているすべてのキーを取得し、矢印キーを押したままにすると移動します。
+                # esc で終了
+                elif event.key == pygame.K_ESCAPE:
+                    return 'quit'
         keys = pygame.key.get_pressed()
         ball.move(
             up=keys[pygame.K_UP],
