@@ -31,6 +31,9 @@
     <Compile Include="Source\cloud.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Source\framework_class.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Source\game_over.py">
       <SubType>Code</SubType>
     </Compile>
