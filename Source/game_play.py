@@ -52,7 +52,7 @@ def show_game_screen(screen, event):
 
         # デバッグ用にHPを表示
         debug_hp = debug_font.render(
-            f"HP: {player.health}", True, (0, 0, 0))  # テキストを設定
+            f"'e' HP: {player.health}", True, (0, 0, 0))  # テキストを設定
 
         # 背景を描画し、ゲームエリアのサイズを取得
         game_area_start, game_area_width, game_area_height = draw_background(
