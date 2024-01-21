@@ -43,8 +43,14 @@ class GamePlayScene:
         )
 
     def draw(self):
-        self.background.draw(self.screen, self.player.health,
-                             self.elapsed_time)  # 背景の描画
+        self.background.draw(self.screen)  # 背景の描画
+        # 雲の描画
+        for cloud in self.clouds:
+            cloud.draw(self.screen)
+        # 左右の長方形描画
+        self.background.draw_rectangles(self.screen)
+        self.background.draw_ui(
+            self.screen, self.player.health, self.elapsed_time)
         debug_font = pygame.font.Font(None, 36)  # デバッグ用のフォント設定
         debug_time = debug_font.render(
             f"Elapsed time: {self.elapsed_time:.2f}", True, (0, 0, 0))  # 経過時間の描画用テキスト
