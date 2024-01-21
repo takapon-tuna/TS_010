@@ -29,8 +29,6 @@ class GameOverScene:
         pass
 
     def draw(self):
-        # 画面を薄い黄色に
-        self.screen.fill((255, 255, 192))
-
-        # テキストを描画
-        self.screen.blit(self.text, self.text_rect)
+        self.screen.fill((255, 255, 192))  # 画面を薄い黄色に
+        self.screen.blit(self.text, self.text_rect)  # テキストを描画
+        pygame.display.flip()  # 画面更新

@@ -24,3 +24,4 @@ class ScoreScreen:
     def draw(self):
         self.screen.fill((255, 192, 192))  # 画面を薄い赤に
         self.screen.blit(self.text, self.text_rect)  # テキストを描画
+        pygame.display.flip()  # 画面更新
