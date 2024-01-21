@@ -43,6 +43,12 @@
     <Compile Include="Source\main.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Source\player_class.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Source\scene_manager_class.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Source\score_screen.py">
       <SubType>Code</SubType>
     </Compile>
