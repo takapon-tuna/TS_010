@@ -3,6 +3,10 @@ import pygame
 
 class GameOverScene:
     def __init__(self, screen):
+
+        # screenをインスタンス変数として保存
+        self.screen = screen
+
         # フォントの設定
         self.font = pygame.font.Font(None, 72)
 
@@ -21,11 +25,12 @@ class GameOverScene:
         return None
 
     def update(self):
+        # 今は必要ない
         pass
 
-    def draw(self, screen):
+    def draw(self):
         # 画面を薄い黄色に
-        screen.fill((255, 255, 192))
+        self.screen.fill((255, 255, 192))
 
         # テキストを描画
-        screen.blit(self.text, self.text_rect)
+        self.screen.blit(self.text, self.text_rect)

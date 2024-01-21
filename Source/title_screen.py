@@ -22,6 +22,7 @@ class TitleScene:
 
     # 更新処理
     def update(self):
+        # 今は必要ない
         pass
 
     # 描画処理

@@ -10,19 +10,21 @@ class SceneManager:
     def __init__(self, screen):
         self.screen = screen  # 画面オブジェクトの保存
         self.scenes = {  # 各シーンのインスタンスを作成
-            'title': TitleScene(self.screen),
-            'game_play': GamePlayScene(self.screen),
-            'game_over': GameOverScene(self.screen),
-            'score_screen': ScoreScreen(self.screen)
+            'title': TitleScene,
+            'game_play': GamePlayScene,
+            'game_over': GameOverScene,
+            'score_screen': ScoreScreen
         }
-        self.current_scene = self.scenes['title']  # 初期シーンを設定
+        self.current_scene = self.scenes['title'](self.screen)  # 初期シーンを設定
 
     # イベント処理
     def handle_events(self, event):
         next_scene = self.current_scene.handle_event(
             event)  # 現在のシーンのイベント処理を呼び出す
         if next_scene is not None:  # 次のシーンが指定されている場合
-            self.current_scene = self.scenes[next_scene]  # 次のシーンに切り替える
+            print(f"シーンが {next_scene} に切り替わります。")  # デバッグ用のログ出力
+            self.current_scene = self.scenes[next_scene](
+                self.screen)  # 次のシーンに切り替える
 
     # 更新処理
     def update(self):

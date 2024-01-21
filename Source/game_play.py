@@ -24,8 +24,14 @@ class GamePlayScene:
                 self.player.health -= 5  # プレイヤーのHPを減らす
             elif event.key == pygame.K_ESCAPE:  # ESCキーが押された場合
                 return 'quit'  # ゲームを終了する
+        return None
 
-        keys = pygame.key.get_pressed()  # 押されているキーを取得
+    def update(self):
+        self.elapsed_time = time.time() - self.start_time  # 経過時間の更新
+        self.game_area_start, self.game_area_width, self.game_area_height = self.background.calculate_game_area()  # ゲームエリアの再計算
+
+        # キーの長押しによるボールの移動処理をupdateメソッドに移動
+        keys = pygame.key.get_pressed()
         self.ball.move(
             up=keys[pygame.K_UP],
             down=keys[pygame.K_DOWN],
@@ -35,12 +41,6 @@ class GamePlayScene:
             game_area_width=self.game_area_width,
             game_area_height=self.game_area_height
         )
-
-        return None
-
-    def update(self):
-        self.elapsed_time = time.time() - self.start_time  # 経過時間の更新
-        self.game_area_start, self.game_area_width, self.game_area_height = self.background.calculate_game_area()  # ゲームエリアの再計算
 
     def draw(self):
         self.background.draw(self.screen, self.player.health,

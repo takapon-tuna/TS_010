@@ -42,6 +42,7 @@ class Framework:
     def draw(self):
         self.manager.draw_ui(self.screen)  # UIの描画
         self.scene_manager.draw()  # シーンの描画
+        pygame.display.flip()  # 画面の更新
 
     # メインループ
     def run(self):

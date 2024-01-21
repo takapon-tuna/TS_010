@@ -4,8 +4,9 @@ from framework_class import Framework
 
 
 def main():
-    framework = Framework()  # フレームワークのインスタンスを作成
-    framework.run()  # フレームワークのメインループを実行
+    if __name__ == "__main__":
+        framework = Framework()  # フレームワークのインスタンスを作成
+        framework.run()  # フレームワークのメインループを実行
 
 
 # このスクリプトが直接実行された場合にmain関数を呼び出す
