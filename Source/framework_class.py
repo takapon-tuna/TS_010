@@ -27,8 +27,13 @@ class Framework:
                     pygame.quit()  # pygameを終了
                     return False
 
+            # シーンマネージャにイベントを処理させる
+            scene_result = self.scene_manager.handle_events(event)
+            if scene_result == 'quit':
+                pygame.quit()  # pygameを終了
+                return False
+
             self.manager.process_events(event)  # UIマネージャにイベントを処理させる
-            self.scene_manager.handle_events(event)  # シーンマネージャにイベントを処理させる
 
         return True
 

@@ -21,7 +21,9 @@ class SceneManager:
     def handle_events(self, event):
         next_scene = self.current_scene.handle_event(
             event)  # 現在のシーンのイベント処理を呼び出す
-        if next_scene is not None:  # 次のシーンが指定されている場合
+        if next_scene == 'quit':
+            return 'quit'  # 'quit'メッセージを返す
+        elif next_scene is not None:  # 次のシーンが指定されている場合
             print(f"シーンが {next_scene} に切り替わります。")  # デバッグ用のログ出力
             self.current_scene = self.scenes[next_scene](
                 self.screen)  # 次のシーンに切り替える
