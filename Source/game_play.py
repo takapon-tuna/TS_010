@@ -1,6 +1,5 @@
 import pygame
 import time
-import random
 from back_ground import Background
 from ball_class import Ball
 from player_class import Player
@@ -15,17 +14,24 @@ class GamePlayScene:
         self.start_time = time.time()  # 開始時間の記録
         self.elapsed_time = 0  # 経過時間の初期化
         self.game_area_start, self.game_area_width, self.game_area_height = self.background.calculate_game_area()  # ゲームエリアの計算
+
+        self.clouds = [Cloud(self.screen.get_width(), self.screen.get_height(
+        ), self.game_area_start, self.game_area_width, self.game_area_height) for _ in range(5)]
+
         self.ball = Ball(self.game_area_start + self.game_area_width //
                          2, self.game_area_height // 2, 5)  # ボールオブジェクトの作成
-        # ゲームエリア内にのみ雲を配置
-        self.clouds = [
-            Cloud(
-                random.randint(self.game_area_start,
-                               self.game_area_start + self.game_area_width),
-                random.randint(0, self.game_area_height // 2)
-            ) for _ in range(5)
-        ]
-        self.add_cloud = False  # 新しい雲を追加するフラグの初期化
+        # # ゲームエリア内にのみ雲を配置
+        # self.clouds = [
+        #     Cloud(
+        #         random.randint(self.game_area_start,
+        #                        self.game_area_start + self.game_area_width),
+        #         random.randint(0, self.game_area_height // 2)
+        #     ) for _ in range(5)
+        # ]
+        self.max_clouds = 20
+        self.cloud_spawn_time = 0
+        self.cloud_spawn_interval = 1  # 1秒ごとに雲を生成
+        # self.add_cloud = False  # 新しい雲を追加するフラグの初期化
 
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -39,8 +45,8 @@ class GamePlayScene:
                 return 'game_over'  # ゲームオーバーシーンに切り替える
             elif event.key == pygame.K_e:  # 'e'キーが押された場合
                 self.player.health -= 5  # プレイヤーのHPを減らす
-            elif event.key == pygame.K_r:  # 'r'キーが押された場合
-                self.add_cloud = True  # 新しい雲を追加するフラグを立てる
+            # elif event.key == pygame.K_r:  # 'r'キーが押された場合
+                # self.add_cloud = True  # 新しい雲を追加するフラグを立てる
         return None
 
     def update(self):
@@ -48,14 +54,31 @@ class GamePlayScene:
         self.game_area_start, self.game_area_width, self.game_area_height = self.background.calculate_game_area()  # ゲームエリアの再計算
 
         # 'r'キーが押された場合に新しい雲を追加
-        if self.add_cloud:
+        # if self.add_cloud:
+        #     new_cloud = Cloud(
+        #         random.randint(self.game_area_start,
+        #                        self.game_area_start + self.game_area_width),
+        #         random.randint(0, self.game_area_height)
+        #     )
+        #     self.clouds.append(new_cloud)
+        #     self.add_cloud = False  # フラグをリセット
+
+        current_time = time.time()
+        if len(self.clouds) < self.max_clouds and current_time - self.cloud_spawn_time > self.cloud_spawn_interval:
+            # Cloud オブジェクトを生成する際に、ゲームエリアの情報を引数として渡す
             new_cloud = Cloud(
-                random.randint(self.game_area_start,
-                               self.game_area_start + self.game_area_width),
-                random.randint(0, self.game_area_height)
+                self.screen.get_width(),
+                self.screen.get_height(),
+                self.game_area_start,
+                self.game_area_width,
+                self.game_area_height
             )
             self.clouds.append(new_cloud)
-            self.add_cloud = False  # フラグをリセット
+            self.cloud_spawn_time = current_time
+
+        # 雲の更新
+        for cloud in self.clouds:
+            cloud.move()
 
         # キーの長押しによるボールの移動処理をupdateメソッドに移動
         keys = pygame.key.get_pressed()
@@ -83,11 +106,11 @@ class GamePlayScene:
             f"Elapsed time: {self.elapsed_time:.2f}", True, (0, 0, 0))  # 経過時間の描画用テキスト
         debug_hp = debug_font.render(
             f"'e' HP: {self.player.health}", True, (0, 0, 0))  # HPの描画用テキスト
-        debug_cloud = debug_font.render(
-            f"'r' Cloud", True, (0, 0, 0))  # 雲を生成するボタン
+        # debug_cloud = debug_font.render(
+        #     f"'r' Cloud", True, (0, 0, 0))  # 雲を生成するボタン
         self.ball.draw(self.screen)  # ボールの描画
         self.screen.blit(debug_time, (0, 0))  # 経過時間の描画
         self.screen.blit(debug_hp, (0, 25))  # HPの描画
-        self.screen.blit(debug_cloud, (0, 50))  # 雲のボタン
+        # self.screen.blit(debug_cloud, (0, 50))  # 雲のボタン
 
         pygame.display.flip()  # 画面更新

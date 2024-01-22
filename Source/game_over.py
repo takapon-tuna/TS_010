@@ -32,3 +32,11 @@ class GameOverScene:
         self.screen.fill((255, 255, 192))  # 画面を薄い黄色に
         self.screen.blit(self.text, self.text_rect)  # テキストを描画
         pygame.display.flip()  # 画面更新
+
+    def move(self, dx, dy):
+        # 雲の位置を更新
+        self.x += dx
+        self.y += dy
+        # 各円の位置も更新
+        for i, (x, y, radius) in enumerate(self.circles):
+            self.circles[i] = (x + dx, y+dy, radius)

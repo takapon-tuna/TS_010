@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>7f6f5bb1-bd12-436a-8f78-5f1b1f4fd017</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>Source\main.py</StartupFile>
+    <StartupFile>Source/main.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -12,6 +12,7 @@
     <Name>TS_010</Name>
     <RootNamespace>TS_010</RootNamespace>
     <InterpreterId>MSBuild|env|$(MSBuildProjectFullPath)</InterpreterId>
+    <IsWindowsApplication>False</IsWindowsApplication>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>

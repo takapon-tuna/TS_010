@@ -97,7 +97,7 @@ class Background:
             screen.blit(self.g_image_low_scaled, (self.rect_width // 4, 50))
 
        # 時間に応じてベンチの画像を切り替え
-        # 経過時間を5秒ごとのインデックスに変換し、画像リストのインデックスとして使用
+        # 経過時間を2秒ごとのインデックスに変換し、画像リストのインデックスとして使用
         bench_image_list = [self.g_benchi_summer_scaled, self.g_benchi_autumn_scaled,
                             self.g_benchi_winter_scaled, self.g_benchi_spring_scaled]
         image_index = int(time_elapsed // 2) % len(bench_image_list)
