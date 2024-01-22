@@ -7,7 +7,12 @@ import math
 class TitleScene:
     def __init__(self, screen):
         self.screen = screen
+        screen_width, screen_height = self.screen.get_size()
         # 画像をロード
+        self.background_original = pygame.image.load(
+            'assets/ui/titlescreen.png')  # 背景をロード
+        self.background = pygame.transform.scale(
+            self.background_original, (screen_width, screen_height))
         self.bg_start = pygame.image.load('assets/ui/start.png')
         self.bg_start_af = pygame.image.load('assets/ui/g.png')  # マウスオーバー用の画像
         self.bg_exit = pygame.image.load('assets/ui/exit.png')
@@ -17,8 +22,6 @@ class TitleScene:
         self.text = self.font.render("Title", True, (255, 255, 255))  # テキストの設定
         self.text_rect = self.text.get_rect(
             center=(self.screen.get_width() / 2, self.screen.get_height() / 2))  # テキストの位置
-        self.background = pygame.image.load(
-            'assets/ui/titlescreen.png')  # 背景をロード
         # ボタンの位置を中央に設定
         self.start_button_pos = (
             self.screen.get_width() / 2, self.screen.get_height() / 2 + 250)
