@@ -8,8 +8,10 @@ class Background:
         self.hp_g_normal_image = pygame.image.load('assets/ui/g.png')
         self.hp_g_high_image = pygame.image.load('assets/ui/g_happy.png')
         self.hp_g_low_image = pygame.image.load('assets/ui/g_sad.png')
-        self.g_benchi_summer_image = pygame.image.load(
-            'assets/ui/g_benchi.png')
+        self.g_benchi_summer_image = pygame.image.load('assets/ui/summer.png')
+        self.g_benchi_autumn_image = pygame.image.load('assets/ui/autumn.png')
+        self.g_benchi_winter_image = pygame.image.load('assets/ui/winter.png')
+        self.g_benchi_spring_image = pygame.image.load('assets/ui/spring.png')
 
         # 画像のサイズを取得
         self.hp_normal_width, self.hp_normal_height = self.hp_g_normal_image.get_size()
@@ -32,9 +34,16 @@ class Background:
         self.g_image_low_scaled = pygame.transform.scale(
             self.hp_g_low_image, (self.hp_low_width, self.hp_low_height))
 
-        # じじい(ベンチ)のサイズを0.8倍に変更
+       # じじい(ベンチ)のサイズを変更
+        bench_scale_factor = self.rect_width / self.bc_summer_width  # 横を長方形に合わせる比率
         self.g_benchi_summer_scaled = pygame.transform.scale(
-            self.g_benchi_summer_image, (int(self.bc_summer_width * 0.8), int(self.bc_summer_height * 0.8)))
+            self.g_benchi_summer_image, (self.rect_width, int(self.bc_summer_height * bench_scale_factor)))
+        self.g_benchi_autumn_scaled = pygame.transform.scale(
+            self.g_benchi_autumn_image, (self.rect_width, int(self.bc_summer_height * bench_scale_factor)))
+        self.g_benchi_winter_scaled = pygame.transform.scale(
+            self.g_benchi_winter_image, (self.rect_width, int(self.bc_summer_height * bench_scale_factor)))
+        self.g_benchi_spring_scaled = pygame.transform.scale(
+            self.g_benchi_spring_image, (self.rect_width, int(self.bc_summer_height * bench_scale_factor)))
 
     def calculate_game_area(self):
 
@@ -49,17 +58,6 @@ class Background:
 
         # 画面に背景画像を描画
         screen.blit(self.bg_image, (0, 0))
-
-        # 長方形の色を設定
-        rect_color = (255, 224, 189)  # 薄い肌色
-
-        # 左側の長方形を描画
-        # pygame.draw.rect(screen, rect_color, pygame.Rect(
-        #     0, 0, self.rect_width, self.rect_height))
-
-        # 右側の長方形を描画
-        # pygame.draw.rect(screen, rect_color, pygame.Rect(
-        # self.screen_width - self.rect_width, 0, self.rect_width, self.rect_height))
 
     def draw_rectangles(self, screen):
         # 長方形の色を設定
@@ -77,13 +75,28 @@ class Background:
         # じじい表示
         # HPに応じて左上の画像を切り替え
         if hp > 20:  # HPが21以上の場合
+            # 長方形の幅に合わせ、縦は画面半分の上側にエフェクトを追加
+            effect_rect = pygame.Surface(
+                (self.rect_width, self.screen_height // 2 - 100), pygame.SRCALPHA)
+            effect_rect.fill((50, 205, 50, 128))  # ライムグリーンの半透明のエフェクト
+            screen.blit(effect_rect, (0, 0))  # 上端から描画
             screen.blit(self.g_image_high_scaled, (self.rect_width // 4, 50))
         elif hp > 10:  # HPが11以上の場合
+            # 長方形の幅に合わせ、縦は画面半分の上側にエフェクトを追加
+            effect_rect = pygame.Surface(
+                (self.rect_width, self.screen_height // 2 - 100), pygame.SRCALPHA)
+            effect_rect.fill((255, 255, 0, 128))  # 黄色の半透明のエフェクト
+            screen.blit(effect_rect, (0, 0))  # 上端から描画
             screen.blit(self.g_image_normal_scaled, (self.rect_width // 4, 50))
         else:  # HPが10以下の場合
+            # 長方形の幅に合わせ、縦は画面半分の上側にエフェクトを追加
+            effect_rect = pygame.Surface(
+                (self.rect_width, self.screen_height // 2 - 100), pygame.SRCALPHA)
+            effect_rect.fill((255, 0, 0, 128))  # 赤い半透明のエフェクト
+            screen.blit(effect_rect, (0, 0))  # 上端から描画
             screen.blit(self.g_image_low_scaled, (self.rect_width // 4, 50))
 
         # 時間が０秒以上なら表示し続ける
         if time_elapsed >= 0:
-            screen.blit(self.g_benchi_summer_scaled,
+            screen.blit(self.g_benchi_spring_scaled,
                         (1, self.rect_height // 2 + 50))
