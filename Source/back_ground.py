@@ -96,7 +96,11 @@ class Background:
             screen.blit(effect_rect, (0, 0))  # 上端から描画
             screen.blit(self.g_image_low_scaled, (self.rect_width // 4, 50))
 
-        # 時間が０秒以上なら表示し続ける
-        if time_elapsed >= 0:
-            screen.blit(self.g_benchi_spring_scaled,
-                        (1, self.rect_height // 2 + 50))
+       # 時間に応じてベンチの画像を切り替え
+        # 経過時間を5秒ごとのインデックスに変換し、画像リストのインデックスとして使用
+        bench_image_list = [self.g_benchi_summer_scaled, self.g_benchi_autumn_scaled,
+                            self.g_benchi_winter_scaled, self.g_benchi_spring_scaled]
+        image_index = int(time_elapsed // 2) % len(bench_image_list)
+        # 選択された画像を描画
+        screen.blit(bench_image_list[image_index],
+                    (1, self.rect_height // 2 + 50))
