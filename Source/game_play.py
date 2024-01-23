@@ -1,7 +1,6 @@
 import pygame
 import time
 from back_ground import Background
-from ball_class import Ball
 from player_class import Player
 from cloud import Cloud
 
@@ -18,8 +17,8 @@ class GamePlayScene:
         self.clouds = [Cloud(self.screen.get_width(), self.screen.get_height(
         ), self.game_area_start, self.game_area_width, self.game_area_height) for _ in range(5)]
 
-        self.ball = Ball(self.game_area_start + self.game_area_width //
-                         2, self.game_area_height // 2, 5)  # ボールオブジェクトの作成
+        # self.ball = Ball(self.game_area_start + self.game_area_width //
+        #  2, self.game_area_height // 2, 5)  # ボールオブジェクトの作成
         self.cloud_spawn_time = 0
 
     # 雲の設定
@@ -67,18 +66,6 @@ class GamePlayScene:
         for cloud in self.clouds:
             cloud.move()
 
-        # キーの長押しによるボールの移動処理をupdateメソッドに移動
-        keys = pygame.key.get_pressed()
-        self.ball.move(
-            up=keys[pygame.K_UP],
-            down=keys[pygame.K_DOWN],
-            left=keys[pygame.K_LEFT],
-            right=keys[pygame.K_RIGHT],
-            game_area_start=self.game_area_start,
-            game_area_width=self.game_area_width,
-            game_area_height=self.game_area_height
-        )
-
     def draw(self):
         self.background.draw(self.screen)  # 背景の描画
         # 雲の描画
@@ -93,7 +80,6 @@ class GamePlayScene:
             f"Elapsed time: {self.elapsed_time:.2f}", True, (0, 0, 0))  # 経過時間の描画用テキスト
         debug_hp = debug_font.render(
             f"'e' HP: {self.player.health}", True, (0, 0, 0))  # HPの描画用テキスト
-        self.ball.draw(self.screen)  # ボールの描画
         self.screen.blit(debug_time, (0, 0))  # 経過時間の描画
         self.screen.blit(debug_hp, (0, 25))  # HPの描画
 

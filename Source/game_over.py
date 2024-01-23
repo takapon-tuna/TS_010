@@ -65,16 +65,6 @@ class GameOverScene:
         self.background_color = (255, 255, 255)  # 白色
         self.background_alpha = 128  # 半透明
 
-        # self.prompt_rect = self.prompt_surface.get_rect(
-        #     center=(screen_width / 2, screen_height - 100))
-
-        # 長方形の背景の設定
-        # self.background_rect = pygame.Rect(
-        #     0, self.prompt_rect.bottom, screen_width, self.prompt_surface.get_height())
-        # self.background_surface = pygame.Surface(self.background_rect.size)
-        # self.background_surface.set_alpha(128)
-        # self.background_surface.fill((255, 255, 255))
-
         self.angle = 0  # 画像の角度
         self.angle_direction = 1  # 角度の変化方向
         self.angle_change_rate = 0.1  # 角度の変化率をもっと遅くする
@@ -151,5 +141,4 @@ class GameOverScene:
         self.screen.blit(background_surface, background_rect)
         self.screen.blit(prompt_surface, prompt_rect)
 
-        # self.screen.blit(self.text, self.text_rect)  # テキストを描画
         pygame.display.flip()  # 画面更新
