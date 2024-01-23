@@ -44,6 +44,10 @@ class GamePlayScene:
 
     def update(self):
         self.elapsed_time = time.time() - self.start_time  # 経過時間の更新
+
+        # 雲の数値を更新
+        self.update_cloud_parameters()
+
         self.game_area_start, self.game_area_width, self.game_area_height = self.background.calculate_game_area()  # ゲームエリアの再計算
 
         current_time = time.time()
@@ -115,3 +119,17 @@ class GamePlayScene:
                          debug_speed.get_width(), screen_height - 35))
 
         pygame.display.flip()  # 画面更新
+
+    def update_cloud_parameters(self):
+       # 経過時間が5秒ごとに増加したかをチェック
+        if int(self.elapsed_time) // 5 > self.last_cloud_update:
+            # 雲の最大数を増やす (最大値は50)
+            self.max_clouds = min(50, self.max_clouds + 1)
+            # 雲の生成間隔を減らす（最小値は0.5秒）
+            self.cloud_spawn_interval = max(
+                0.5, self.cloud_spawn_interval - 0.1)
+            # 各雲のスピードを増やす（最大値は10）
+            for cloud in self.clouds:
+                cloud.speed_clouds = min(10, cloud.speed_clouds + 1)
+            # 最後の更新時間を記録する
+            self.last_cloud_update = int(self.elapsed_time) // 5
