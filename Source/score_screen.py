@@ -14,7 +14,7 @@ class ScoreScreen:
         # スペースキーが押されたかどうかをチェック
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
-                return 'title'
+                return 'game_over'
         return None
 
     def update(self):

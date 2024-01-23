@@ -36,7 +36,7 @@ class GamePlayScene:
                 cloud for cloud in self.clouds if not cloud.is_clicked(mouse_pos)]
         elif event.type == pygame.KEYDOWN:  # キーダウンイベントの場合
             if event.key == pygame.K_SPACE:  # スペースキーが押された場合
-                return 'game_over'  # ゲームオーバーシーンに切り替える
+                return 'score_screen'  # ゲームオーバーシーンに切り替える
             elif event.key == pygame.K_e:  # 'e'キーが押された場合
                 self.player.health -= 5  # プレイヤーのHPを減らす
         return None
