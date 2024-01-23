@@ -50,7 +50,7 @@ class Cloud:
         self.wobble_speed = 0.05  # ゆらぎの速さ
         self.wobble_phase = random.uniform(0, math.pi * 2)  # ゆらぎの位相
 
-        print(f"生成された ({self.x}, {self.y})")  # 雲の生成位置をログ出力
+        # print(f"生成された ({self.x}, {self.y})")  # 雲の生成位置をログ出力
 
     def generate_random_cloud(self):
         # 雲の形をより細かくランダムに生成する
@@ -99,7 +99,7 @@ class Cloud:
             self.circles[i] = (x + self.dx * self.speed +
                                wobble_x, y + self.dy * self.speed + wobble_y, radius)
 
-        print(f"移動 ({self.x}, {self.y})")  # 雲の新しい位置をログ出力
+        # print(f"移動 ({self.x}, {self.y})")  # 雲の新しい位置をログ出力
 
     def draw(self, screen):
         for x, y, radius in self.circles:
@@ -109,7 +109,21 @@ class Cloud:
             pygame.draw.ellipse(screen, (255, 255, 255), ellipse_rect)
 
         # 雲が描画されたことをログ出力
-        print(f"描画された {len(self.circles)} circles")
+        # print(f"描画された {len(self.circles)} circles")
+
+         # 目標エリアの正方形を描画
+        target_area_rect = pygame.Rect(
+            self.target_area_center_x - self.target_area_size / 2,
+            self.target_area_center_y - self.target_area_size / 2,
+            self.target_area_size,
+            self.target_area_size
+        )
+        pygame.draw.rect(screen, (0, 255, 0),
+                         target_area_rect, 2)  # 緑色で枠線のみの正方形を描画
+
+        # 目標地点を描画（赤い点）
+        pygame.draw.circle(screen, (255, 0, 0), (int(
+            self.target_x), int(self.target_y)), 5)
 
     def is_clicked(self, mouse_pos):
         # マウスの位置が雲のいずれかの円の中にあるかをチェック
