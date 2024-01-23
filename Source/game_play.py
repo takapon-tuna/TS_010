@@ -20,9 +20,13 @@ class GamePlayScene:
 
         self.ball = Ball(self.game_area_start + self.game_area_width //
                          2, self.game_area_height // 2, 5)  # ボールオブジェクトの作成
-        self.max_clouds = 20
         self.cloud_spawn_time = 0
-        self.cloud_spawn_interval = 1  # 1秒ごとに雲を生成
+
+    # 雲の設定
+        self.max_clouds = 20  # 雲の最大数
+        self.cloud_spawn_interval = 2  # 何秒ごとに雲を生成
+
+        self.last_cloud_update = -1
 
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -88,5 +92,26 @@ class GamePlayScene:
         self.ball.draw(self.screen)  # ボールの描画
         self.screen.blit(debug_time, (0, 0))  # 経過時間の描画
         self.screen.blit(debug_hp, (0, 25))  # HPの描画
+
+        # 雲の数を取得
+        cloud_count = len(self.clouds)
+        # 雲の最大数
+        max_cloud_count = self.max_clouds
+        # 現在の雲のスピード（全雲の平均スピードを表示）
+        average_speed = sum(
+            cloud.speed_clouds for cloud in self.clouds) / cloud_count if cloud_count else 0
+
+        # デバッグ情報のテキストを作成
+        debug_cloud_count = debug_font.render(
+            f"Clouds: {cloud_count}/{max_cloud_count}", True, (0, 255, 0))
+        debug_speed = debug_font.render(
+            f"Speed: {average_speed:.2f}", True, (0, 255, 0))
+
+        # デバッグ情報を画面の右下に描画
+        screen_width, screen_height = self.screen.get_size()
+        self.screen.blit(debug_cloud_count, (screen_width -
+                         debug_cloud_count.get_width(), screen_height - 70))
+        self.screen.blit(debug_speed, (screen_width -
+                         debug_speed.get_width(), screen_height - 35))
 
         pygame.display.flip()  # 画面更新

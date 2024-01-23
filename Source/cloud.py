@@ -43,7 +43,7 @@ class Cloud:
         self.game_area_height = game_area_height
 
         # 移動スピードを設定
-        self.speed = 2.0  # スピード係数、小さいほど遅くなる
+        self.speed_clouds = 3.0  # 雲のスピード(小さいほど遅くなる)
 
         # ゆらぎのための変数
         self.wobble_amount = 2  # ゆらぎの大きさ
@@ -84,20 +84,19 @@ class Cloud:
             direction_to_target.normalize_ip()
             self.dx = direction_to_target.x
             self.dy = direction_to_target.y
-
         # ゆらぎを加える
         self.wobble_phase += self.wobble_speed
         wobble_x = self.wobble_amount * math.sin(self.wobble_phase)
         wobble_y = self.wobble_amount * math.cos(self.wobble_phase)
 
         # 雲の位置を更新（スピード係数を掛ける）
-        self.x += self.dx * self.speed + wobble_x
-        self.y += self.dy * self.speed + wobble_y
+        self.x += self.dx * self.speed_clouds + wobble_x
+        self.y += self.dy * self.speed_clouds + wobble_y
 
        # 各円の位置も更新
         for i, (x, y, radius) in enumerate(self.circles):
-            self.circles[i] = (x + self.dx * self.speed +
-                               wobble_x, y + self.dy * self.speed + wobble_y, radius)
+            self.circles[i] = (x + self.dx * self.speed_clouds +
+                               wobble_x, y + self.dy * self.speed_clouds + wobble_y, radius)
 
         # print(f"移動 ({self.x}, {self.y})")  # 雲の新しい位置をログ出力
 
