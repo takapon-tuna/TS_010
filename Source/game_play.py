@@ -27,17 +27,17 @@ class GamePlayScene:
         self.clouds = [Cloud(self.screen.get_width(), self.screen.get_height(
         ), self.game_area_start, self.game_area_width, self.game_area_height) for _ in range(5)]
 
-        # self.ball = Ball(self.game_area_start + self.game_area_width //
-        #  2, self.game_area_height // 2, 5)  # ボールオブジェクトの作成
         self.cloud_spawn_time = 0
+
+        self.game_over = False  # ゲームオーバーフラグの初期化
+
+        self.last_health_decrease_time = time.time()  # HPが減少した最後の時間を初期化
 
     # 雲の設定
         self.max_clouds = 20  # 雲の最大数
-        self.cloud_spawn_interval = 2  # 何秒ごとに雲を生成
+        self.cloud_spawn_interval = 1.5  # 何秒ごとに雲を生成
 
         self.last_cloud_update = -1
-
-        self.game_over = False  # ゲームオーバーフラグの初期化
 
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -69,6 +69,8 @@ class GamePlayScene:
                     points = 10 * self.cloud_hit_streak * score_multiplier
                     # スコアにポイントを加算
                     self.score += points
+                    # 雲を消したらHPを0.5回復する
+                    self.player.health += 0.5
                     break  # 1つのクリックで複数の雲は消せない
         elif event.type == pygame.KEYDOWN:  # キーダウンイベントの場合
             if event.key == pygame.K_SPACE:  # スペースキーが押された場合
@@ -84,6 +86,11 @@ class GamePlayScene:
 
     def update(self):
         self.elapsed_time = time.time() - self.start_time  # 経過時間の更新
+
+        # プレイヤーのHPが時間とともに減少するようにする
+        if time.time() - self.last_health_decrease_time >= 1:
+            self.player.health -= 1
+            self.last_health_decrease_time = time.time()
 
         # 雲の数値を更新
         self.update_cloud_parameters()
@@ -190,12 +197,12 @@ class GamePlayScene:
        # 経過時間が5秒ごとに増加したかをチェック
         if int(self.elapsed_time) // 5 > self.last_cloud_update:
             # 雲の最大数を増やす (最大値は50)
-            self.max_clouds = min(50, self.max_clouds + 1)
+            self.max_clouds = min(50, self.max_clouds + 2)
             # 雲の生成間隔を減らす（最小値は0.5秒）
             self.cloud_spawn_interval = max(
-                0.2, self.cloud_spawn_interval - 0.1)
+                0.4, self.cloud_spawn_interval - 0.2)
             # 各雲のスピードを増やす（最大値は10）
             for cloud in self.clouds:
-                cloud.speed_clouds = min(20, cloud.speed_clouds + 1)
+                cloud.speed_clouds = min(30, cloud.speed_clouds + 2)
             # 最後の更新時間を記録する
             self.last_cloud_update = int(self.elapsed_time) // 5
