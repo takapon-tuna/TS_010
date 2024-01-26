@@ -1,5 +1,6 @@
 import pygame
 import math
+import json
 
 # タイトルシーンクラス
 
@@ -73,11 +74,13 @@ class TitleScene:
 
     # イベント処理
     def handle_event(self, event):
-        if event.type == pygame.MOUSEBUTTONDOWN:  # マウスボタンが押された場合
-            # スタートボタンがクリックされた場合
+        if event.type == pygame.MOUSEBUTTONDOWN:
             if self.start_button_rect.collidepoint(event.pos):
-                return 'game_play'  # ゲームプレイシーンに切り替える
-            # 終了ボタンがクリックされた場合
+                player_name = self.load_player_name()
+                if player_name:  # 名前が存在する場合
+                    return 'game_play'  # ゲームプレイシーンに切り替える
+                else:  # 名前が存在しない場合
+                    return 'name_input'  # 名前入力シーンに切り替える
             elif self.exit_button_rect.collidepoint(event.pos):
                 return 'quit'  # ゲームを終了する
         return None
@@ -134,3 +137,12 @@ class TitleScene:
         self.screen.blit(self.bg_g_title, self.bg_g_title_rect)
 
         pygame.display.flip()  # 画面更新
+
+# プレイヤー名をロードする関数
+    def load_player_name(self):
+        try:
+            with open('player_name.json', 'r') as file:
+                data = json.load(file)
+                return data.get('name', None)
+        except FileNotFoundError:
+            return None

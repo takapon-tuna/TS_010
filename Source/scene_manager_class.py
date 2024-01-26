@@ -2,6 +2,7 @@ from title_screen import TitleScene
 from game_play import GamePlayScene
 from game_over import GameOverScene
 from score_screen import ScoreScreen
+from name_input_scene import NameInputScene
 
 # シーンマネージャークラス
 
@@ -13,7 +14,8 @@ class SceneManager:
             'title': TitleScene,
             'game_play': GamePlayScene,
             'game_over': GameOverScene,
-            'score_screen': ScoreScreen
+            'score_screen': ScoreScreen,
+            'name_input': NameInputScene
         }
         self.current_scene = self.scenes['title'](self.screen)  # 初期シーンを設定
 

@@ -44,6 +44,9 @@
     <Compile Include="Source\main.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Source\name_input_scene.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Source\player_class.py">
       <SubType>Code</SubType>
     </Compile>
