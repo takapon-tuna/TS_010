@@ -1,12 +1,13 @@
 import pygame
 import json
+from cryptography.fernet import Fernet
 
 
 class NameInputScene:
     def __init__(self, screen):
         self.screen = screen
         self.clock = pygame.time.Clock()
-        self.font = pygame.font.Font(None, 50)
+        self.font = pygame.font.SysFont(None, 50)
         self.input_box = pygame.Rect(100, 100, 140, 50)
         self.color_inactive = pygame.Color('lightskyblue3')
         self.color_active = pygame.Color('dodgerblue2')
@@ -34,8 +35,20 @@ class NameInputScene:
         return None
 
     def save_player_name(self, name):
-        with open('player_name.json', 'w') as file:
-            json.dump({'name': name}, file)
+        # 既存のキーを読み込むか、新しいキーを生成
+        try:
+            with open('iziruna.key', 'rb') as keyfile:
+                key = keyfile.read()
+        except FileNotFoundError:
+            key = Fernet.generate_key()
+            with open('iziruna.key', 'wb') as keyfile:
+                keyfile.write(key)
+
+        cipher_suite = Fernet(key)
+        encrypted_name = cipher_suite.encrypt(name.encode('utf-8'))
+
+        with open('player_name.json', 'wb') as file:
+            file.write(encrypted_name)
 
     def update(self):
         pass

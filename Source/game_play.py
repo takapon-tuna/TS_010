@@ -1,8 +1,10 @@
 import pygame
 import time
+import json
 from back_ground import Background
 from player_class import Player
 from cloud import Cloud
+from cryptography.fernet import Fernet
 
 
 class GamePlayScene:
@@ -193,6 +195,14 @@ class GamePlayScene:
         self.screen.blit(debug_speed, (screen_width -
                          debug_speed.get_width(), screen_height - 35))
 
+    # プレイヤー名の復号化とデバッグ表示
+        player_name = self.decrypt_player_name()
+        debug_font = pygame.font.Font(None, 36)
+        debug_name = debug_font.render(
+            f"Player: {player_name}", True, (255, 255, 255))
+        self.screen.blit(debug_name, (self.screen.get_width(
+        ) - debug_name.get_width() - 10, self.screen.get_height() - debug_name.get_height() - 210))
+
         pygame.display.flip()  # 画面更新
 
     def update_cloud_parameters(self):
@@ -302,3 +312,16 @@ class GamePlayScene:
         # ゲージバーの前景を描画（緑色）
         pygame.draw.rect(self.screen, (0, 255, 0), (gauge_x, gauge_y,
                          gauge_width * (1 - streak_ratio), gauge_height))
+
+    def decrypt_player_name(self):
+        try:
+            with open('iziruna.key', 'rb') as keyfile:
+                key = keyfile.read()
+            cipher_suite = Fernet(key)
+            with open('player_name.json', 'rb') as file:
+                encrypted_name = file.read()
+            decrypted_name = cipher_suite.decrypt(
+                encrypted_name).decode('utf-8')
+            return decrypted_name
+        except (FileNotFoundError, ValueError, json.decoder.JSONDecodeError):
+            return "Unknown Player"

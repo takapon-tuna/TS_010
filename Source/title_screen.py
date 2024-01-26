@@ -1,6 +1,8 @@
 import pygame
 import math
 import json
+from cryptography.fernet import Fernet
+
 
 # タイトルシーンクラス
 
@@ -141,8 +143,13 @@ class TitleScene:
 # プレイヤー名をロードする関数
     def load_player_name(self):
         try:
-            with open('player_name.json', 'r') as file:
-                data = json.load(file)
-                return data.get('name', None)
-        except FileNotFoundError:
-            return None
+            with open('iziruna.key', 'rb') as keyfile:
+                key = keyfile.read()
+            cipher_suite = Fernet(key)
+            with open('player_name.json', 'rb') as file:
+                encrypted_name = file.read()
+            decrypted_name = cipher_suite.decrypt(
+                encrypted_name).decode('utf-8')
+            return decrypted_name if decrypted_name else None  # 名前が空でないことを確認
+        except (FileNotFoundError, ValueError, json.decoder.JSONDecodeError):
+            return None  # エラーが発生した場合は None を返す
