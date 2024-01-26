@@ -45,6 +45,9 @@ class Background:
         self.g_benchi_spring_scaled = pygame.transform.scale(
             self.g_benchi_spring_image, (self.rect_width, int(self.bc_summer_height * bench_scale_factor)))
 
+    def get_right_rectangle_width(self):
+        return self.rect_width
+
     def calculate_game_area(self):
 
         # ゲーム操作部分の開始位置とサイズを計算

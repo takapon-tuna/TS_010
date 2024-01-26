@@ -43,7 +43,7 @@ class Cloud:
         self.game_area_height = game_area_height
 
         # 移動スピードを設定
-        self.speed_clouds = 3.0  # 雲のスピード(小さいほど遅くなる)
+        self.speed_clouds = 4.0  # 雲のスピード(小さいほど遅くなる)
 
         # ゆらぎのための変数
         self.wobble_amount = 2  # ゆらぎの大きさ

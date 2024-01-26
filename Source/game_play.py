@@ -34,8 +34,8 @@ class GamePlayScene:
         self.last_health_decrease_time = time.time()  # HPが減少した最後の時間を初期化
 
     # 雲の設定
-        self.max_clouds = 20  # 雲の最大数
-        self.cloud_spawn_interval = 1.5  # 何秒ごとに雲を生成
+        self.max_clouds = 15  # 雲の最大数
+        self.cloud_spawn_interval = 1.3  # 何秒ごとに雲を生成
 
         self.last_cloud_update = -1
 
@@ -56,21 +56,22 @@ class GamePlayScene:
 
                     # ストリーク時間に応じたスコア乗算率の設定
                     if time_since_last_hit <= 20:
-                        score_multiplier = 1.5
+                        score_multiplier = 4
                     elif time_since_last_hit <= 40:
-                        score_multiplier = 2
+                        score_multiplier = 6
                     elif time_since_last_hit <= 60:
-                        score_multiplier = 5
+                        score_multiplier = 12
                     else:
-                        score_multiplier = 5  # 60秒以上は5倍のまま
+                        score_multiplier = 12  # 60秒以上は12倍のまま
 
                     self.last_cloud_hit_time = current_time
                     # ポイントの計算（ストリークと乗算率に応じて）
                     points = 10 * self.cloud_hit_streak * score_multiplier
                     # スコアにポイントを加算
                     self.score += points
-                    # 雲を消したらHPを0.5回復する
-                    self.player.health += 0.5
+                    # 雲を消したらHPを回復
+                    if self.player.health <= 30:
+                        self.player.health += 1.75
                     break  # 1つのクリックで複数の雲は消せない
         elif event.type == pygame.KEYDOWN:  # キーダウンイベントの場合
             if event.key == pygame.K_SPACE:  # スペースキーが押された場合
@@ -145,6 +146,9 @@ class GamePlayScene:
         self.screen.blit(debug_time, (0, 0))  # 経過時間の描画
         self.screen.blit(debug_hp, (0, 25))  # HPの描画
 
+    # UI(スコア)の描画
+        self.draw_ui_elements()
+
         # スコアの描画
         debug_score = debug_font.render(
             f"Score: {int(self.score)}", True, (0, 0, 0))
@@ -154,15 +158,13 @@ class GamePlayScene:
         cloud_count = len(self.clouds)
         # 雲の最大数
         max_cloud_count = self.max_clouds
-        # 現在の雲のスピード（全雲の平均スピードを表示）
-        average_speed = sum(
-            cloud.speed_clouds for cloud in self.clouds) / cloud_count if cloud_count else 0
-
+        # 現在の雲のスピード（最後の雲のスピードを表示）
+        current_speed = self.clouds[-1].speed_clouds if self.clouds else 0
         # デバッグ情報のテキストを作成
         debug_cloud_count = debug_font.render(
             f"Clouds: {cloud_count}/{max_cloud_count}", True, (0, 255, 0))
         debug_speed = debug_font.render(
-            f"Speed: {average_speed:.2f}", True, (0, 255, 0))
+            f"Speed: {current_speed:.2f}", True, (0, 255, 0))
 
         # ストリーク数とストリークの残り時間のデバッグ情報を追加
         streak_time_remaining = max(
@@ -194,15 +196,109 @@ class GamePlayScene:
         pygame.display.flip()  # 画面更新
 
     def update_cloud_parameters(self):
-       # 経過時間が5秒ごとに増加したかをチェック
+        # 経過時間が5秒ごとに増加したかをチェック
         if int(self.elapsed_time) // 5 > self.last_cloud_update:
-            # 雲の最大数を増やす (最大値は50)
-            self.max_clouds = min(50, self.max_clouds + 2)
-            # 雲の生成間隔を減らす（最小値は0.5秒）
-            self.cloud_spawn_interval = max(
-                0.4, self.cloud_spawn_interval - 0.2)
-            # 各雲のスピードを増やす（最大値は10）
+            # 雲の最大数を増やす
+            self.max_clouds = min(
+                20, self.max_clouds + 1)
+            # 各雲のスピードを増やす
             for cloud in self.clouds:
-                cloud.speed_clouds = min(30, cloud.speed_clouds + 2)
+                cloud.speed_clouds = min(
+                    8, cloud.speed_clouds + 0.33)
             # 最後の更新時間を記録する
             self.last_cloud_update = int(self.elapsed_time) // 5
+        # ストリーク数が50の倍数に達する度に雲の生成間隔を短くする
+        if self.cloud_hit_streak % 50 == 0 and self.cloud_hit_streak != 0:
+            self.cloud_spawn_interval = max(
+                0.8, self.cloud_spawn_interval * 0.95)  # 生成間隔を5%短くする
+
+    def format_score(self, score):
+        if score < 1000:
+            return str(score)
+        elif score < 1000000:
+            # 1,000以上100万未満は小数点第一位まで表示してKで表示
+            return f'{score / 1000:.1f}K'
+        elif score < 1000000000:
+            # 100万以上は小数点第三位まで表示してMで表示
+            return f'{score / 1000000:.3f}M'
+        else:
+            # 10億以上は小数点第三位まで表示してBで表示
+            return f'{score / 1000000000:.3f}B'
+
+    def draw_ui_elements(self):
+        # Background クラスから右側の長方形の横幅を取得
+        right_rect_width = self.background.get_right_rectangle_width()
+
+    # スコア表示
+
+        # スコア表示エリアの横幅を計算（右側の長方形の80%）
+        score_area_width = int(right_rect_width * 0.9)
+        score_area_height = 100  # 高さ
+        score_area_x = self.screen.get_width() - right_rect_width + \
+            (right_rect_width - score_area_width) // 2
+        score_area_y = 50  # 上からの位置を設定
+
+        # 内側の四角形を描画
+        score_area_color = (200, 200, 200)  # 灰色
+        pygame.draw.rect(self.screen, score_area_color, (score_area_x,
+                         score_area_y, score_area_width, score_area_height))
+
+        # スコアのフォントサイズを計算（横幅に合わせる）
+        score_font_size = int(
+            score_area_width / len("Score: 999M") * 2.0)
+        score_font = pygame.font.Font(None, score_font_size)
+
+        # スコアの描画位置を設定
+        score_text = "Score: "
+        score_value = self.format_score(self.score)  # スコアをフォーマット
+        score_rendered = score_font.render(
+            f"{score_text}{score_value}", True, (0, 0, 0))  # 黒色でテキストを描画
+        score_pos_x = score_area_x + \
+            (score_area_width - score_rendered.get_width()) // 2  # 中央揃え
+        score_pos_y = score_area_y + \
+            (score_area_height - score_rendered.get_height()) // 2  # 中央揃え
+
+    # ストリーク（コンボ）表示
+
+        # ストリーク表示エリアの設定
+        streak_area_height = 100  # ストリーク表示エリアの高さ
+        streak_area_y = score_area_y + score_area_height + 50  # スコアエリアの下に配置
+
+        # ストリーク表示エリアの四角形を描画（黄色）
+        streak_area_color = (255, 255, 0)  # 黄色
+        pygame.draw.rect(self.screen, streak_area_color, (score_area_x,
+                         streak_area_y, score_area_width, streak_area_height))
+
+        # ストリーク数のテキストを描画
+        streak_font = pygame.font.Font(
+            None, score_font_size)  # ストリーク数のフォントサイズはスコアと同じにする
+        streak_text = f"Streak: {self.cloud_hit_streak}"
+        streak_rendered = streak_font.render(
+            streak_text, True, (0, 0, 0))  # 黒色でテキストを描画
+        streak_pos_x = score_area_x + \
+            (score_area_width - streak_rendered.get_width()) // 2  # 中央揃え
+        streak_pos_y = streak_area_y + 20  # 上からの位置を設定
+        self.screen.blit(streak_rendered, (streak_pos_x, streak_pos_y))
+
+        # ストリーク継続時間のゲージバーを描画
+        gauge_width = score_area_width - 20  # ゲージバーの横幅はスコアエリアの横幅からマージンを引いたもの
+        gauge_height = 20  # ゲージバーの高さ
+        gauge_x = score_area_x + 10  # ゲージバーのX位置（マージンを考慮）
+        gauge_y = streak_pos_y + streak_rendered.get_height() + 10  # ゲージバーのY位置（テキストの下）
+
+        # ストリーク継続時間の割合を計算
+        streak_time_passed = time.time() - self.last_cloud_hit_time
+        streak_ratio = max(
+            0, min(1, streak_time_passed / self.streak_duration))
+
+    # 描画
+        # スコアを内側の四角形の中央に描画
+        self.screen.blit(score_rendered, (score_pos_x, score_pos_y))
+
+        # ゲージバーの背景を描画（灰色）
+        pygame.draw.rect(self.screen, (200, 200, 200),
+                         (gauge_x, gauge_y, gauge_width, gauge_height))
+
+        # ゲージバーの前景を描画（緑色）
+        pygame.draw.rect(self.screen, (0, 255, 0), (gauge_x, gauge_y,
+                         gauge_width * (1 - streak_ratio), gauge_height))
