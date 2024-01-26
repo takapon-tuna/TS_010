@@ -37,17 +37,17 @@ class NameInputScene:
     def save_player_name(self, name):
         # 既存のキーを読み込むか、新しいキーを生成
         try:
-            with open('iziruna.key', 'rb') as keyfile:
+            with open('data/iziruna.key', 'rb') as keyfile:
                 key = keyfile.read()
         except FileNotFoundError:
             key = Fernet.generate_key()
-            with open('iziruna.key', 'wb') as keyfile:
+            with open('data/iziruna.key', 'wb') as keyfile:
                 keyfile.write(key)
 
         cipher_suite = Fernet(key)
         encrypted_name = cipher_suite.encrypt(name.encode('utf-8'))
 
-        with open('player_name.json', 'wb') as file:
+        with open('data/player_name.json', 'wb') as file:
             file.write(encrypted_name)
 
     def update(self):

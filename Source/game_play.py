@@ -315,10 +315,10 @@ class GamePlayScene:
 
     def decrypt_player_name(self):
         try:
-            with open('iziruna.key', 'rb') as keyfile:
+            with open('data/iziruna.key', 'rb') as keyfile:
                 key = keyfile.read()
             cipher_suite = Fernet(key)
-            with open('player_name.json', 'rb') as file:
+            with open('data/player_name.json', 'rb') as file:
                 encrypted_name = file.read()
             decrypted_name = cipher_suite.decrypt(
                 encrypted_name).decode('utf-8')
