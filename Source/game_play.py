@@ -12,6 +12,15 @@ class GamePlayScene:
     def __init__(self, screen, firebase, auth):
         self.firebase = firebase
         self.auth = auth
+
+        # BGMの初期化と再生
+        pygame.mixer.init()
+        pygame.mixer.music.load('assets/bgm/Plantation.mp3')
+        pygame.mixer.music.set_volume(0.1)
+        pygame.mixer.music.play(-1)  # -1は無限ループを意味します
+
+        # SEをロード
+        self.cloud_sound = pygame.mixer.Sound('assets/se/cloud.mp3')
         # 設定
 
         self.score = 0  # スコアの初期化

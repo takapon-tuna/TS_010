@@ -14,6 +14,14 @@ class TitleScene:
         self.auth = auth
         screen_width, screen_height = self.screen.get_size()
 
+        # BGMの初期化と再生
+        pygame.mixer.init()
+        pygame.mixer.music.load('assets/bgm/title_2.mp3')
+        pygame.mixer.music.play(-1)
+
+        # SEのロード
+        self.start_sound = pygame.mixer.Sound('assets/se/start.mp3')
+
     # 画像をロード
         self.background_original = pygame.image.load(
             'assets/ui/titlescreen.png')  # 背景をロード
@@ -80,12 +88,15 @@ class TitleScene:
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.start_button_rect.collidepoint(event.pos):
+                self.start_sound.play()  # 効果音
                 player_name = self.load_player_name()
                 if player_name:  # 名前が存在する場合
                     return 'game_play'  # ゲームプレイシーンに切り替える
                 else:  # 名前が存在しない場合
                     return 'name_input'  # 名前入力シーンに切り替える
             elif self.exit_button_rect.collidepoint(event.pos):
+                self.start_sound.play()  # 効果音
+                player_name = self.load_player_name()
                 return 'quit'  # ゲームを終了する
         return None
 
