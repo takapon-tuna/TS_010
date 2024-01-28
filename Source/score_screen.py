@@ -1,8 +1,9 @@
 import pygame
+import json
 
 
 class ScoreScreen:
-    def __init__(self, screen, firebase, auth):
+    def __init__(self, screen, firebase, auth, ):
 
         self.score_bg = pygame.image.load(
             'assets/score/score_bg.png')  # 背景をロード
@@ -10,6 +11,9 @@ class ScoreScreen:
         self.screen = screen
         self.firebase = firebase
         self.auth = auth
+
+        self.current_score = 0  # 現在のスコアを初期化
+        self.current_play_time = 0.0  # 現在のプレイ時間を初期化
 
         self.font = pygame.font.SysFont('msgothic', 72)  # フォントの設定
         self.text = self.font.render(
@@ -22,6 +26,15 @@ class ScoreScreen:
         self.prompt_color = (255, 255, 255)  # 白色
         self.background_color = (255, 255, 255)  # 白色
         self.background_alpha = 128  # 半透明
+
+        # スコアとプレイ時間を JSON ファイルから読み込む
+        try:
+            with open('data/score_data.json', 'r') as f:
+                data = json.load(f)
+                self.current_score = data['score']
+                self.current_play_time = data['play_time']
+        except FileNotFoundError:
+            print("Score data file not found.")
 
         # トップ10のスコアを取得
         self.top_scores = self.get_top_scores()
@@ -49,9 +62,28 @@ class ScoreScreen:
                      title_text.get_width() // 2, 50)  # 位置を設定
         self.screen.blit(title_text, title_pos)
 
+        # 現在のスコアをランキングの一番上に表示
+        your_score_font = pygame.font.SysFont('msgothic', 34, True)
+        your_score_text = f"今回のスコア: {self.current_score}"
+        your_score_rendered = your_score_font.render(
+            your_score_text, True, (255, 255, 255))  # 白色でテキストを描画
+        your_time_text = f"{self.current_play_time:.2f}秒"
+        your_time_rendered = your_score_font.render(
+            your_time_text, True, (255, 255, 255))  # 白色でテキストを描画
+
+        # スコアとプレイ時間の位置を設定
+        your_score_pos_x = self.screen.get_width() * 3 // 6 - \
+            your_score_rendered.get_width() // 2
+        your_time_pos_x = self.screen.get_width() * 4 // 6 - \
+            your_time_rendered.get_width() // 2
+        your_pos_y = 150  # トップスコアより少し上に配置
+
+        self.screen.blit(your_score_rendered, (your_score_pos_x, your_pos_y))
+        self.screen.blit(your_time_rendered, (your_time_pos_x, your_pos_y))
+
         # トップ10のスコアを表示
         for i, score_data in enumerate(self.top_scores):
-            score_font = pygame.font.SysFont('msgothic', 36, True)
+            score_font = pygame.font.SysFont('msgothic', 34, True)
             rank_text = f"{i+1}."
             name_text = f"{score_data['name']}"
             score_text = f"{score_data['score']}"
@@ -80,7 +112,7 @@ class ScoreScreen:
         prompt_surface = self.prompt_font.render(
             self.prompt_text, True, self.prompt_color)
         prompt_rect = prompt_surface.get_rect(
-            center=(self.screen.get_width() / 2, self.screen.get_height() - 150))
+            center=(self.screen.get_width() / 2, self.screen.get_height() - 100))
 
         background_surface = pygame.Surface(
             (self.screen.get_width(), prompt_surface.get_height()))
@@ -106,3 +138,11 @@ class ScoreScreen:
         scores_list.sort(key=lambda x: x["score"], reverse=True)  # スコアで降順にソート
 
         return scores_list
+
+    def set_current_score_and_time(self, score, play_time):
+        self.current_score = score
+        self.current_play_time = play_time
+
+    def update_score(self, score):
+        # 現在のスコアを更新
+        self.current_score = score

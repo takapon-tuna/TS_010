@@ -6,6 +6,7 @@ from back_ground import Background
 from player_class import Player
 from cloud import Cloud
 from cryptography.fernet import Fernet
+from score_screen import ScoreScreen
 
 
 class GamePlayScene:
@@ -149,6 +150,10 @@ class GamePlayScene:
             self.send_score_to_firebase(
                 player_name, self.score, play_time, pc_username)  # スコアを送信
 
+            # スコアとプレイ時間を JSON ファイルに出力
+            with open('data/score_data.json', 'w') as f:
+                json.dump({'score': self.score, 'play_time': play_time}, f)
+
     def draw(self):
         # 画面サイズを取得
         screen_width, screen_height = self.screen.get_size()
@@ -182,7 +187,7 @@ class GamePlayScene:
         # ストリーク数が50の倍数に達する度に雲の生成間隔を短くする
         if self.cloud_hit_streak % 50 == 0 and self.cloud_hit_streak != 0:
             self.cloud_spawn_interval = max(
-                0.2, self.cloud_spawn_interval * 0.95)  # 生成間隔を5%短くする
+                0.6, self.cloud_spawn_interval * 0.95)  # 生成間隔を5%短くする
 
     def format_score(self, score):
         if score < 1000:
