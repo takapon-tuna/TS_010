@@ -3,7 +3,7 @@ from game_play import GamePlayScene
 from game_over import GameOverScene
 from score_screen import ScoreScreen
 from name_input_scene import NameInputScene
-
+from score_screen_all import ScoreScreenAll
 # シーンマネージャークラス
 
 
@@ -17,7 +17,8 @@ class SceneManager:
             'game_play': GamePlayScene,
             'game_over': GameOverScene,
             'score_screen': ScoreScreen,
-            'name_input': NameInputScene
+            'name_input': NameInputScene,
+            'score_screen_all': ScoreScreenAll
         }
         self.current_scene = self.scenes['title'](
             self.screen, self.firebase, self.auth)  # 初期シーンを設定

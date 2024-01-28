@@ -46,13 +46,13 @@ class Framework:
         # self.manager.draw_ui(self.screen)  # UIの描画
         self.scene_manager.draw()  # シーンの描画
 
-        # フレームレートの表示
-        fps = self.clock.get_fps()
-        font = pygame.font.Font(None, 36)
-        fps_text = font.render(f'FPS: {fps:.2f}', True, pygame.Color('white'))
-        screen_width = pygame.display.get_surface().get_size()[0]
-        fps_text_width = fps_text.get_rect().width
-        self.screen.blit(fps_text, (screen_width - fps_text_width - 10, 10))
+        # # フレームレートの表示
+        # fps = self.clock.get_fps()
+        # font = pygame.font.Font(None, 36)
+        # fps_text = font.render(f'FPS: {fps:.2f}', True, pygame.Color('white'))
+        # screen_width = pygame.display.get_surface().get_size()[0]
+        # fps_text_width = fps_text.get_rect().width
+        # self.screen.blit(fps_text, (screen_width - fps_text_width - 10, 10))
 
         pygame.display.flip()
 

@@ -84,6 +84,15 @@ class TitleScene:
         # タイトルアニメーション用の時間変数
         self.time_title = 0
 
+        # スコア表示用のテキストと四角形の設定
+        self.score_font = pygame.font.SysFont('msgothic', 72)  # フォントの設定
+        self.score_text = self.score_font.render(
+            "トップ１００を表示", True, (0, 0, 0))  # テキストの設定
+        self.score_text_rect = self.score_text.get_rect(
+            topright=(screen.get_width() - 10, 10))  # テキストの位置
+        self.score_rect = pygame.Rect(
+            self.score_text_rect.right - 100, self.score_text_rect.bottom + 10, 100, 100)  # 四角形の位置とサイズ
+
     # イベント処理
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -98,6 +107,8 @@ class TitleScene:
                 self.start_sound.play()  # 効果音
                 player_name = self.load_player_name()
                 return 'quit'  # ゲームを終了する
+            elif self.score_rect.collidepoint(event.pos):
+                return 'score_screen_all'  # スコア全表示シーンに切り替える
         return None
 
     # 更新処理
@@ -150,6 +161,10 @@ class TitleScene:
 
         # タイトル用じじい画像の描画
         self.screen.blit(self.bg_g_title, self.bg_g_title_rect)
+
+        # スコア表示用のテキストと四角形の描画
+        self.screen.blit(self.score_text, self.score_text_rect)  # テキスト描画
+        pygame.draw.rect(self.screen, (255, 0, 0), self.score_rect)  # 四角形描画
 
         pygame.display.flip()  # 画面更新
 
