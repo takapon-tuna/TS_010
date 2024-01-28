@@ -38,7 +38,9 @@ class NameInputScene:
                 elif event.key == pygame.K_BACKSPACE:
                     self.text = self.text[:-1]
                 else:
-                    self.text += event.unicode
+                    # テキストの長さが16文字以下の場合のみ、新しい文字を追加
+                    if len(self.text) < 16:
+                        self.text += event.unicode
         return None
 
     def update(self):
@@ -58,7 +60,10 @@ class NameInputScene:
             "1. 名前に使える文字はアルファベットと数字記号のみで。日本語は使えないよ。",
             "2. 名前はオンライン上に保存されるから、問題のある単語の使用はおすすめしないよ。",
             "3. ランキングはトップ10のまでが表示されるけど、ユーザーチェックでPCのユーザー名が紐づけられるから、俺にはバレるよ。",
-            "4. あとから名前の変更は基本できないから、考えてつけてね。"
+            "4. あとから名前の変更は基本できないから、考えてつけてね。",
+            "5. 文字数は16個までだからよろしく。",
+            "\n",
+            "このゲームはコンボを続ければ続けるほどスコアが増えてくから腕がちぎれるまでクリックし続けてね"
         ]
         for i, text in enumerate(notice_text):
             notice_surface = self.notice_font.render(
@@ -75,9 +80,16 @@ class NameInputScene:
         # 入力が開始されていない場合、「クリックして」と表示
         if not self.active:
             click_surface = self.click_font.render(
-                "クリックして", True, (255, 255, 255))
+                "クリックしてね↑", True, (255, 255, 255))
             self.screen.blit(click_surface, (self.input_box.x + self.input_box.w // 2 -
                              click_surface.get_width() // 2, self.input_box.y + self.input_box.h + 10))
+
+        # 入力がアクティブになった場合、「名前を入力してね」と表示
+        elif self.active:
+            input_surface = self.click_font.render(
+                "名前を入力してね", True, (255, 255, 255))
+            self.screen.blit(input_surface, (self.input_box.x + self.input_box.w // 2 -
+                             input_surface.get_width() // 2, self.input_box.y + self.input_box.h + 10))
 
     def save_player_name(self, name):
         try:
