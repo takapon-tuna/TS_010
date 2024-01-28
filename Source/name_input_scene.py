@@ -1,11 +1,13 @@
 import pygame
-import json
+import os
 from cryptography.fernet import Fernet
 
 
 class NameInputScene:
-    def __init__(self, screen):
+    def __init__(self, screen, firebase, auth):
         self.screen = screen
+        self.firebase = firebase
+        self.auth = auth
         self.clock = pygame.time.Clock()
         self.font = pygame.font.SysFont(None, 50)
         self.input_box = pygame.Rect(100, 100, 140, 50)
@@ -49,6 +51,13 @@ class NameInputScene:
 
         with open('data/player_name.json', 'wb') as file:
             file.write(encrypted_name)
+
+        # uid.txtが存在しない場合のみUIDを生成して保存
+        if not os.path.exists('data/uid.txt'):
+            user = self.auth.sign_in_anonymous()
+            uid = user['localId']
+            with open('data/uid.txt', 'w') as f:
+                f.write(uid)
 
     def update(self):
         pass

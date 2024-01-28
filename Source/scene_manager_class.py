@@ -8,16 +8,19 @@ from name_input_scene import NameInputScene
 
 
 class SceneManager:
-    def __init__(self, screen):
-        self.screen = screen  # 画面オブジェクトの保存
-        self.scenes = {  # 各シーンのインスタンスを作成
+    def __init__(self, screen, firebase, auth):
+        self.screen = screen
+        self.firebase = firebase
+        self.auth = auth
+        self.scenes = {
             'title': TitleScene,
             'game_play': GamePlayScene,
             'game_over': GameOverScene,
             'score_screen': ScoreScreen,
             'name_input': NameInputScene
         }
-        self.current_scene = self.scenes['title'](self.screen)  # 初期シーンを設定
+        self.current_scene = self.scenes['title'](
+            self.screen, self.firebase, self.auth)  # 初期シーンを設定
 
     # イベント処理
     def handle_events(self, event):
@@ -28,7 +31,7 @@ class SceneManager:
         elif next_scene is not None:  # 次のシーンが指定されている場合
             print(f"シーンが {next_scene} に切り替わります。")  # デバッグ用のログ出力
             self.current_scene = self.scenes[next_scene](
-                self.screen)  # 次のシーンに切り替える
+                self.screen, self.firebase, self.auth)  # 次のシーンに切り替える
 
     # 更新処理
     def update(self):

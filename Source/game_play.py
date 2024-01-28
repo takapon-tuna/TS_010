@@ -8,7 +8,9 @@ from cryptography.fernet import Fernet
 
 
 class GamePlayScene:
-    def __init__(self, screen):
+    def __init__(self, screen, firebase, auth):
+        self.firebase = firebase
+        self.auth = auth
         # 設定
 
         self.score = 0  # スコアの初期化
@@ -19,7 +21,7 @@ class GamePlayScene:
         self.streak_points = 0  # ストリーク中に獲得したポイント
         self.last_score_update = time.time()  # 最後にスコアを更新した時間の初期化
 
-        self.screen = screen  # 画面オブジェクトの保存
+        self.screen = screen
         self.background = Background(screen)  # 背景オブジェクトの作成
         self.player = Player()  # プレイヤーオブジェクトの作成
         self.start_time = time.time()  # 開始時間の記録
@@ -126,7 +128,9 @@ class GamePlayScene:
 
     # ゲームオーバーの条件をチェック
         if self.player.health <= 0:
-            self.game_over = True  # ゲームオーバーフラグ
+            self.game_over = True  # ゲームオーバーフラグを立てる
+            player_name = self.decrypt_player_name()  # プレイヤー名を復号化
+            self.send_score_to_firebase(player_name, self.score)  # スコアを送信
 
     def draw(self):
         # 画面サイズを取得
@@ -325,3 +329,25 @@ class GamePlayScene:
             return decrypted_name
         except (FileNotFoundError, ValueError, json.decoder.JSONDecodeError):
             return "Unknown Player"
+
+    def send_score_to_firebase(self, player_name, score):
+        # uid.txtからUIDを読み込む
+        try:
+            with open('data/uid.txt', 'r') as f:
+                uid = f.read().strip()
+        except FileNotFoundError:
+            # uid.txtが存在しない場合は匿名認証を使用して新しいUIDを生成
+            user = self.auth.sign_in_anonymous()
+            uid = user['localId']
+            with open('data/uid.txt', 'w') as f:
+                f.write(uid)
+
+        # Firebaseから既存のスコアを取得
+        existing_score = self.firebase.database().child(
+            "scores").child(uid).child("score").get().val()
+
+        # 新しいスコアが既存のスコアより高い場合、または既存のスコアが存在しない場合にのみ書き込む
+        if existing_score is None or score > existing_score:
+            data = {"name": player_name, "score": score, "uid": uid}
+            # Firebase Realtime Databaseにデータを保存（既存のデータは上書きされる）
+            self.firebase.database().child("scores").child(uid).set(data)

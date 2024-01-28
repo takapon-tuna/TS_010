@@ -18,3 +18,48 @@ siyou.txt
 ## スコアランキングの表示
  `score_screen.py`ではオンラインデータベースから取得したトップ10のスコアを表示する。
  トップ10のスコアの下に、現在のプレイセッションでのプレイヤーのスコアを表示する。
+
+## オンラインスコアの実装に必要なもの
+  
+  バックエンドサーバー
+- サーバー: AWS EC2、Google Cloud Compute Engine、Heroku、または自分のサーバー。
+- サーバーソフトウェア: Node.js、Django、Flask、Ruby on Railsなどのサーバーサイドフレームワーク。
+
+データベース
+- データベースサービス: MySQL、PostgreSQL、MongoDB、Firebase Realtime Databaseなど。
+- データベース管理ツール: phpMyAdmin、MongoDB Compass、データベースコマンドラインツール。
+
+APIエンドポイント
+- APIフレームワーク: Express.js、Django REST framework、Flask-RESTful。
+- 認証: OAuth、JWT、APIキー。
+- ドキュメント: Swagger、API Blueprint。
+
+HTTPリクエストライブラリ
+- Pythonライブラリ: requests。
+
+セキュリティ
+- HTTPS: SSL/TLS証明書。
+- データ検証: 入力検証ライブラリ、例えば Marshmallow。
+- レートリミット: クライアントからのリクエスト数を制限する。
+
+エラーハンドリング
+- ロギング: ログ記録のためのライブラリ、例えば Pythonの logging。
+- エラーレスポンス: エラーコードとメッセージを含む標準化されたレスポンスフォーマット。
+
+テスト
+- ユニットテスト: unittest、pytest。
+- 統合テスト: バックエンドとデータベースの統合テスト。
+- 負荷テスト: JMeter、Locust。
+
+ドキュメント
+- APIドキュメント: エンドポイント、リクエスト、レスポンスのフォーマット。
+- データベーススキーマ: テーブル、フィールド、リレーションシップの説明。
+
+デプロイメント
+- デプロイメントツール: Docker、Kubernetes、Ansible。
+- CI/CD: Jenkins、GitHub Actions、GitLab CI。
+
+フロントエンドの変更
+- UIコンポーネント: スコア表示用のテキストボックス、リスト、テーブル。
+- イベントハンドラ: スコア送信用のボタンクリックイベント。
+- データバインディング: UIとスコアデータの同期。

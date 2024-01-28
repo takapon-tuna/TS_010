@@ -2,9 +2,11 @@ import pygame
 
 
 class GameOverScene:
-    def __init__(self, screen):
-
+    def __init__(self, screen, firebase, auth):
         self.screen = screen
+        self.firebase = firebase
+        self.auth = auth
+
         screen_width, screen_height = self.screen.get_size()
     # 画像の読み込み
         self.gameover_purple_ori = pygame.image.load(
