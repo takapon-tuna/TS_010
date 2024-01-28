@@ -1,6 +1,7 @@
 import pygame
 import time
 import json
+import getpass
 from back_ground import Background
 from player_class import Player
 from cloud import Cloud
@@ -130,7 +131,10 @@ class GamePlayScene:
         if self.player.health <= 0:
             self.game_over = True  # ゲームオーバーフラグを立てる
             player_name = self.decrypt_player_name()  # プレイヤー名を復号化
-            self.send_score_to_firebase(player_name, self.score)  # スコアを送信
+            play_time = time.time() - self.start_time  # プレイ時間を計算
+            pc_username = getpass.getuser()  # PCのユーザーネームを取得
+            self.send_score_to_firebase(
+                player_name, self.score, play_time, pc_username)  # スコアを送信
 
     def draw(self):
         # 画面サイズを取得
@@ -330,7 +334,7 @@ class GamePlayScene:
         except (FileNotFoundError, ValueError, json.decoder.JSONDecodeError):
             return "Unknown Player"
 
-    def send_score_to_firebase(self, player_name, score):
+    def send_score_to_firebase(self, player_name, score, play_time, pc_username):
         # uid.txtからUIDを読み込む
         try:
             with open('data/uid.txt', 'r') as f:
@@ -348,6 +352,7 @@ class GamePlayScene:
 
         # 新しいスコアが既存のスコアより高い場合、または既存のスコアが存在しない場合にのみ書き込む
         if existing_score is None or score > existing_score:
-            data = {"name": player_name, "score": score, "uid": uid}
+            data = {"name": player_name, "score": score, "uid": uid,
+                    "play_time": play_time, "pc_username": pc_username}
             # Firebase Realtime Databaseにデータを保存（既存のデータは上書きされる）
             self.firebase.database().child("scores").child(uid).set(data)
