@@ -47,6 +47,8 @@ class GamePlayScene:
 
         self.last_health_decrease_time = time.time()  # HPが減少した最後の時間を初期化
 
+        self.top_scores = self.get_top_scores()
+
     # 雲の設定
         self.max_clouds = 15  # 雲の最大数
         self.cloud_spawn_interval = 1.3  # 何秒ごとに雲を生成
@@ -59,6 +61,8 @@ class GamePlayScene:
             for cloud in self.clouds[:]:
                 if cloud.is_clicked(mouse_pos):
                     self.clouds.remove(cloud)
+                    self.cloud_sound.play()  # 雲を消したときの効果音を再生
+
                     current_time = time.time()
                     time_since_last_hit = current_time - self.last_cloud_hit_time
 
@@ -157,68 +161,9 @@ class GamePlayScene:
         self.background.draw_rectangles(self.screen)
         self.background.draw_ui(
             self.screen, self.player.health, self.elapsed_time)
-        # debug_font = pygame.font.Font(None, 36)  # デバッグ用のフォント設定
-        # debug_time = debug_font.render(
-        # f"Elapsed time: {self.elapsed_time:.2f}", True, (0, 0, 0))  # 経過時間の描画用テキスト
-        # debug_hp = debug_font.render(
-        # f"'e' HP: {self.player.health}", True, (0, 0, 0))  # HPの描画用テキスト
-        # self.screen.blit(debug_time, (0, 0))  # 経過時間の描画
-        # self.screen.blit(debug_hp, (0, 25))  # HPの描画
 
     # UI(スコア)の描画
         self.draw_ui_elements()
-
-        # スコアの描画
-        # debug_score = debug_font.render(
-        #     f"Score: {int(self.score)}", True, (0, 0, 0))
-        # self.screen.blit(debug_score, (0, 50))  # スコアを画面に表示
-
-        # 雲の数を取得
-        # cloud_count = len(self.clouds)
-        # 雲の最大数
-        # max_cloud_count = self.max_clouds
-        # 現在の雲のスピード（最後の雲のスピードを表示）
-        # current_speed = self.clouds[-1].speed_clouds if self.clouds else 0
-        # デバッグ情報のテキストを作成
-        # debug_cloud_count = debug_font.render(
-        # f"Clouds: {cloud_count}/{max_cloud_count}", True, (0, 255, 0))
-        # debug_speed = debug_font.render(
-        # f"Speed: {current_speed:.2f}", True, (0, 255, 0))
-
-        # ストリーク数とストリークの残り時間のデバッグ情報を追加
-        # streak_time_remaining = max(
-        #     0, self.streak_duration - (time.time() - self.last_cloud_hit_time))
-        # debug_streak_info = debug_font.render(
-        #     f"Streak: {self.cloud_hit_streak} (Time: {streak_time_remaining:.2f}s)", True, (255, 255, 0))
-        # self.screen.blit(debug_streak_info, (screen_width -
-        #                  debug_streak_info.get_width(), screen_height - 105))
-
-        # 次の雲が生成されるまでの残り時間のデバッグ情報を追加
-        # next_cloud_spawn_time_remaining = max(
-        #     0, self.cloud_spawn_interval - (time.time() - self.cloud_spawn_time))
-        # debug_next_cloud_spawn_info = debug_font.render(
-        #     f"Next Cloud: {next_cloud_spawn_time_remaining:.2f}s", True, (255, 255, 0))
-        # self.screen.blit(debug_next_cloud_spawn_info, (screen_width -
-        #                  debug_next_cloud_spawn_info.get_width(), screen_height - 140))
-
-        # 現在のスコアのデバッグ情報を追加
-        # debug_current_score_info = debug_font.render(
-        #     f"Current Score: {int(self.score)}", True, (255, 255, 0))
-        # self.screen.blit(debug_current_score_info, (screen_width -
-        #                  debug_current_score_info.get_width(), screen_height - 175))
-
-        # self.screen.blit(debug_cloud_count, (screen_width -
-        #                  debug_cloud_count.get_width(), screen_height - 70))
-        # self.screen.blit(debug_speed, (screen_width -
-        #                  debug_speed.get_width(), screen_height - 35))
-
-    # プレイヤー名の復号化とデバッグ表示
-        # player_name = self.decrypt_player_name()
-        # debug_font = pygame.font.Font(None, 36)
-        # debug_name = debug_font.render(
-        #     f"Player: {player_name}", True, (255, 255, 255))
-        # self.screen.blit(debug_name, (self.screen.get_width(
-        # ) - debug_name.get_width() - 10, self.screen.get_height() - debug_name.get_height() - 210))
 
         pygame.display.flip()  # 画面更新
 
@@ -330,6 +275,14 @@ class GamePlayScene:
         pygame.draw.rect(self.screen, (0, 255, 0), (gauge_x, gauge_y,
                          gauge_width * (1 - streak_ratio), gauge_height))
 
+        for index, score_data in enumerate(self.top_scores):  # 保存したスコアを使用
+            score_text = f"{index + 1}. {score_data['name']}: {score_data['score']}"
+            score_rendered = score_font.render(score_text, True, (0, 0, 0))
+            text_x = score_area_x + \
+                (right_rect_width - score_rendered.get_width()) // 2
+            self.screen.blit(
+                score_rendered, (text_x, score_area_y + 500 + index * 50))
+
     def decrypt_player_name(self):
         try:
             with open('data/iziruna.key', 'rb') as keyfile:
@@ -365,3 +318,35 @@ class GamePlayScene:
                     "play_time": play_time, "pc_username": pc_username}
             # Firebase Realtime Databaseにデータを保存（既存のデータは上書きされる）
             self.firebase.database().child("scores").child(uid).set(data)
+
+    def get_top_scores(self):
+        # Firebaseからスコアデータを取得
+        scores = self.firebase.database().child("scores").get().val()
+        if scores:
+            # スコアデータをスコアの値でソート
+            sorted_scores = sorted(
+                scores.values(), key=lambda s: s['score'], reverse=True)
+            # トップ10のスコアを取得
+            top_scores = sorted_scores[:10]
+            return top_scores
+        return []
+
+    def draw_top_scores(self):
+        # Background クラスから右側の長方形の横幅を取得
+        right_rect_width = self.background.get_right_rectangle_width()
+
+        # スコア表示エリアの設定
+        score_area_x = self.screen.get_width() - right_rect_width
+        score_area_y = self.screen.get_height() * 0.5  # 長方形の下側からの開始位置を下に移動
+
+        # スコアのフォント設定
+        score_font = pygame.font.Font(None, 60)  # フォントサイズを小さくする
+
+        # トップ10のスコアを描画
+        for index, score_data in enumerate(self.top_scores):  # 保存したスコアを使用
+            score_text = f"{index + 1}. {score_data['name']}: {score_data['score']}"
+            score_rendered = score_font.render(score_text, True, (0, 0, 0))
+            text_x = score_area_x + \
+                (right_rect_width - score_rendered.get_width()) // 2  # テキストを中央に寄せる
+            self.screen.blit(
+                score_rendered, (text_x, score_area_y + index * 50))  # 行間を狭くする
