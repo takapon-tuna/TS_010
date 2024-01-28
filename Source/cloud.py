@@ -111,18 +111,18 @@ class Cloud:
         # print(f"描画された {len(self.circles)} circles")
 
          # 目標エリアの正方形を描画
-        target_area_rect = pygame.Rect(
-            self.target_area_center_x - self.target_area_size / 2,
-            self.target_area_center_y - self.target_area_size / 2,
-            self.target_area_size,
-            self.target_area_size
-        )
-        pygame.draw.rect(screen, (0, 255, 0),
-                         target_area_rect, 2)  # 緑色で枠線のみの正方形を描画
+        # target_area_rect = pygame.Rect(
+        #     self.target_area_center_x - self.target_area_size / 2,
+        #     self.target_area_center_y - self.target_area_size / 2,
+        #     self.target_area_size,
+        #     self.target_area_size
+        # )
+        # pygame.draw.rect(screen, (0, 255, 0),
+        #                  target_area_rect, 2)  # 緑色で枠線のみの正方形を描画
 
-        # 目標地点を描画（赤い点）
-        pygame.draw.circle(screen, (255, 0, 0), (int(
-            self.target_x), int(self.target_y)), 5)
+        # # 目標地点を描画（赤い点）
+        # pygame.draw.circle(screen, (255, 0, 0), (int(
+        #     self.target_x), int(self.target_y)), 5)
 
     def is_clicked(self, mouse_pos):
         # マウスの位置が雲のいずれかの円の中にあるかをチェック

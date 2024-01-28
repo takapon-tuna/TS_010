@@ -79,10 +79,10 @@ class GamePlayScene:
                         self.player.health += 1.75
                     break  # 1つのクリックで複数の雲は消せない
         elif event.type == pygame.KEYDOWN:  # キーダウンイベントの場合
-            if event.key == pygame.K_SPACE:  # スペースキーが押された場合
-                return 'score_screen'  # ゲームオーバーシーンに切り替える
-            elif event.key == pygame.K_e:  # 'e'キーが押された場合
-                self.player.health -= 5  # プレイヤーのHPを減らす
+            # if event.key == pygame.K_SPACE:  # スペースキーが押された場合
+            # return 'score_screen'  # ゲームオーバーシーンに切り替える
+            if event.key == pygame.K_e:  # 'e'キーが押された場合
+                self.player.health -= 40  # プレイヤーのHPを減らす
 
         # ゲームオーバーフラグが立っている場合はシーンを切り替える
         if self.game_over:
@@ -148,68 +148,68 @@ class GamePlayScene:
         self.background.draw_rectangles(self.screen)
         self.background.draw_ui(
             self.screen, self.player.health, self.elapsed_time)
-        debug_font = pygame.font.Font(None, 36)  # デバッグ用のフォント設定
-        debug_time = debug_font.render(
-            f"Elapsed time: {self.elapsed_time:.2f}", True, (0, 0, 0))  # 経過時間の描画用テキスト
-        debug_hp = debug_font.render(
-            f"'e' HP: {self.player.health}", True, (0, 0, 0))  # HPの描画用テキスト
-        self.screen.blit(debug_time, (0, 0))  # 経過時間の描画
-        self.screen.blit(debug_hp, (0, 25))  # HPの描画
+        # debug_font = pygame.font.Font(None, 36)  # デバッグ用のフォント設定
+        # debug_time = debug_font.render(
+        # f"Elapsed time: {self.elapsed_time:.2f}", True, (0, 0, 0))  # 経過時間の描画用テキスト
+        # debug_hp = debug_font.render(
+        # f"'e' HP: {self.player.health}", True, (0, 0, 0))  # HPの描画用テキスト
+        # self.screen.blit(debug_time, (0, 0))  # 経過時間の描画
+        # self.screen.blit(debug_hp, (0, 25))  # HPの描画
 
     # UI(スコア)の描画
         self.draw_ui_elements()
 
         # スコアの描画
-        debug_score = debug_font.render(
-            f"Score: {int(self.score)}", True, (0, 0, 0))
-        self.screen.blit(debug_score, (0, 50))  # スコアを画面に表示
+        # debug_score = debug_font.render(
+        #     f"Score: {int(self.score)}", True, (0, 0, 0))
+        # self.screen.blit(debug_score, (0, 50))  # スコアを画面に表示
 
         # 雲の数を取得
-        cloud_count = len(self.clouds)
+        # cloud_count = len(self.clouds)
         # 雲の最大数
-        max_cloud_count = self.max_clouds
+        # max_cloud_count = self.max_clouds
         # 現在の雲のスピード（最後の雲のスピードを表示）
-        current_speed = self.clouds[-1].speed_clouds if self.clouds else 0
+        # current_speed = self.clouds[-1].speed_clouds if self.clouds else 0
         # デバッグ情報のテキストを作成
-        debug_cloud_count = debug_font.render(
-            f"Clouds: {cloud_count}/{max_cloud_count}", True, (0, 255, 0))
-        debug_speed = debug_font.render(
-            f"Speed: {current_speed:.2f}", True, (0, 255, 0))
+        # debug_cloud_count = debug_font.render(
+        # f"Clouds: {cloud_count}/{max_cloud_count}", True, (0, 255, 0))
+        # debug_speed = debug_font.render(
+        # f"Speed: {current_speed:.2f}", True, (0, 255, 0))
 
         # ストリーク数とストリークの残り時間のデバッグ情報を追加
-        streak_time_remaining = max(
-            0, self.streak_duration - (time.time() - self.last_cloud_hit_time))
-        debug_streak_info = debug_font.render(
-            f"Streak: {self.cloud_hit_streak} (Time: {streak_time_remaining:.2f}s)", True, (255, 255, 0))
-        self.screen.blit(debug_streak_info, (screen_width -
-                         debug_streak_info.get_width(), screen_height - 105))
+        # streak_time_remaining = max(
+        #     0, self.streak_duration - (time.time() - self.last_cloud_hit_time))
+        # debug_streak_info = debug_font.render(
+        #     f"Streak: {self.cloud_hit_streak} (Time: {streak_time_remaining:.2f}s)", True, (255, 255, 0))
+        # self.screen.blit(debug_streak_info, (screen_width -
+        #                  debug_streak_info.get_width(), screen_height - 105))
 
         # 次の雲が生成されるまでの残り時間のデバッグ情報を追加
-        next_cloud_spawn_time_remaining = max(
-            0, self.cloud_spawn_interval - (time.time() - self.cloud_spawn_time))
-        debug_next_cloud_spawn_info = debug_font.render(
-            f"Next Cloud: {next_cloud_spawn_time_remaining:.2f}s", True, (255, 255, 0))
-        self.screen.blit(debug_next_cloud_spawn_info, (screen_width -
-                         debug_next_cloud_spawn_info.get_width(), screen_height - 140))
+        # next_cloud_spawn_time_remaining = max(
+        #     0, self.cloud_spawn_interval - (time.time() - self.cloud_spawn_time))
+        # debug_next_cloud_spawn_info = debug_font.render(
+        #     f"Next Cloud: {next_cloud_spawn_time_remaining:.2f}s", True, (255, 255, 0))
+        # self.screen.blit(debug_next_cloud_spawn_info, (screen_width -
+        #                  debug_next_cloud_spawn_info.get_width(), screen_height - 140))
 
         # 現在のスコアのデバッグ情報を追加
-        debug_current_score_info = debug_font.render(
-            f"Current Score: {int(self.score)}", True, (255, 255, 0))
-        self.screen.blit(debug_current_score_info, (screen_width -
-                         debug_current_score_info.get_width(), screen_height - 175))
+        # debug_current_score_info = debug_font.render(
+        #     f"Current Score: {int(self.score)}", True, (255, 255, 0))
+        # self.screen.blit(debug_current_score_info, (screen_width -
+        #                  debug_current_score_info.get_width(), screen_height - 175))
 
-        self.screen.blit(debug_cloud_count, (screen_width -
-                         debug_cloud_count.get_width(), screen_height - 70))
-        self.screen.blit(debug_speed, (screen_width -
-                         debug_speed.get_width(), screen_height - 35))
+        # self.screen.blit(debug_cloud_count, (screen_width -
+        #                  debug_cloud_count.get_width(), screen_height - 70))
+        # self.screen.blit(debug_speed, (screen_width -
+        #                  debug_speed.get_width(), screen_height - 35))
 
     # プレイヤー名の復号化とデバッグ表示
-        player_name = self.decrypt_player_name()
-        debug_font = pygame.font.Font(None, 36)
-        debug_name = debug_font.render(
-            f"Player: {player_name}", True, (255, 255, 255))
-        self.screen.blit(debug_name, (self.screen.get_width(
-        ) - debug_name.get_width() - 10, self.screen.get_height() - debug_name.get_height() - 210))
+        # player_name = self.decrypt_player_name()
+        # debug_font = pygame.font.Font(None, 36)
+        # debug_name = debug_font.render(
+        #     f"Player: {player_name}", True, (255, 255, 255))
+        # self.screen.blit(debug_name, (self.screen.get_width(
+        # ) - debug_name.get_width() - 10, self.screen.get_height() - debug_name.get_height() - 210))
 
         pygame.display.flip()  # 画面更新
 
@@ -228,7 +228,7 @@ class GamePlayScene:
         # ストリーク数が50の倍数に達する度に雲の生成間隔を短くする
         if self.cloud_hit_streak % 50 == 0 and self.cloud_hit_streak != 0:
             self.cloud_spawn_interval = max(
-                0.8, self.cloud_spawn_interval * 0.95)  # 生成間隔を5%短くする
+                0.2, self.cloud_spawn_interval * 0.95)  # 生成間隔を5%短くする
 
     def format_score(self, score):
         if score < 1000:

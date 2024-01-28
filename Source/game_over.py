@@ -21,6 +21,8 @@ class GameOverScene:
             'assets/game_overe/over_purple.png')  # 紫のオーバー
         self.over_yellow_ori = pygame.image.load(
             'assets/game_overe/over_yellow.png')  # 黄のオーバー
+        self.g_die_ori = pygame.image.load(
+            'assets/game_overe/g_die.png')
 
     # 画像のスケーリング
         scale_factor = 0.6
@@ -39,6 +41,9 @@ class GameOverScene:
             self.over_purple_ori, (int(self.over_purple_ori.get_width() * scale_factor), int(self.over_purple_ori.get_height() * scale_factor)))
         self.over_yellow = pygame.transform.scale(
             self.over_yellow_ori, (int(self.over_yellow_ori.get_width() * scale_factor), int(self.over_yellow_ori.get_height()*scale_factor)))
+        # 死んでる爺
+        self.g_die = pygame.transform.scale(
+            self.g_die_ori, (int(self.g_die_ori.get_width() * scale_factor), int(self.g_die_ori.get_height() * scale_factor)))
 
     # 設定
         self.toggle_time = 1000  # 画像を一秒ごとに切り替え
@@ -125,6 +130,11 @@ class GameOverScene:
             self.screen.blit(self.gameover_purple, self.gameover_purple_rect)
         else:
             self.screen.blit(self.gameover_yellow, self.gameover_yellow_rect)
+
+        # g_dieの描画
+        g_die_rect = self.g_die.get_rect(
+            center=(self.screen.get_width() / 2, self.screen.get_height() - 350))
+        self.screen.blit(self.g_die, g_die_rect)
 
         # 長方形の背景の Surface を作成
         prompt_surface = self.prompt_font.render(
