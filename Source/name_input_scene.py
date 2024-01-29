@@ -19,9 +19,12 @@ class NameInputScene:
         self.active = False
         self.text = ''
         self.done = False
-        self.notice_font = pygame.font.SysFont('msgothic', 32)  # 注意書き用フォント
-        self.enter_font = pygame.font.SysFont('msgothic', 40)  # エンターキー指示用のフォント
-        self.click_font = pygame.font.SysFont('msgothic', 40)  # クリック指示用のフォント
+        self.notice_font = pygame.font.SysFont(
+            ['msgothic', 'Hiragino Maru Gothic Pro'], 32)  # 注意書き用フォント
+        self.enter_font = pygame.font.SysFont(
+            ['msgothic', 'Hiragino Maru Gothic Pro'], 40)  # エンターキー指示用のフォント
+        self.click_font = pygame.font.SysFont(
+            ['msgothic', 'Hiragino Maru Gothic Pro'], 40)  # クリック指示用のフォント
 
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:

@@ -11,7 +11,8 @@ class ScoreScreenAll:
         self.background_color_t = (255, 200, 200)
 
         # フォントの設定
-        self.font = pygame.font.SysFont('msgothic', 60)
+        self.font = pygame.font.SysFont(
+            ['msgothic', 'Hiragino Maru Gothic Pro'], 60)
 
         # トップ100のスコアを取得
         self.top_scores = self.get_top_scores()
