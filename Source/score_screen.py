@@ -16,7 +16,7 @@ class ScoreScreen:
         self.current_play_time = 0.0  # 現在のプレイ時間を初期化
 
         self.font = pygame.font.SysFont(
-            ['msgothic', 'Hiragino Maru Gothic Pro'], 72)  # フォントの設定
+            ['msgothic', 'ヒラキノ丸コpronw4'], 72)  # フォントの設定
         self.text = self.font.render(
             "score_screen", True, (144, 238, 144))  # テキストの設定
         self.text_rect = self.text.get_rect(
@@ -57,7 +57,7 @@ class ScoreScreen:
 
         # ランキングのタイトルを表示
         title_font = pygame.font.SysFont(
-            ['msgothic', 'Hiragino Maru Gothic Pro'], 72, False)
+            ['msgothic', 'ヒラキノ丸コpronw4'], 72, False)
         title_text = title_font.render(
             "ランキング", True, (0, 0, 140))  # 白色でテキストを描画
         title_pos = (self.screen.get_width() // 2 -
@@ -66,7 +66,7 @@ class ScoreScreen:
 
         # 現在のスコアをランキングの一番上に表示
         your_score_font = pygame.font.SysFont(
-            ['msgothic', 'Hiragino Maru Gothic Pro'], 34, True)
+            ['msgothic', 'ヒラキノ丸コpronw4'], 34, True)
         your_score_text = f"今回のスコア: {self.current_score}"
         your_score_rendered = your_score_font.render(
             your_score_text, True, (255, 255, 255))  # 白色でテキストを描画
@@ -87,7 +87,7 @@ class ScoreScreen:
         # トップ10のスコアを表示
         for i, score_data in enumerate(self.top_scores):
             score_font = pygame.font.SysFont(
-                ['msgothic', 'Hiragino Maru Gothic Pro'], 34, True)
+                ['msgothic', 'ヒラキノ丸コpronw4'], 34, True)
             rank_text = f"{i+1}."
             name_text = f"{score_data['name']}"
             score_text = f"{score_data['score']}"

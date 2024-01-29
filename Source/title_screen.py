@@ -86,7 +86,7 @@ class TitleScene:
 
         # スコア表示用のテキストと四角形の設定
         self.score_font = pygame.font.SysFont(
-            ['msgothic', 'Hiragino Maru Gothic Pro'], 72)  # フォントの設定
+            ['msgothic', 'ヒラキノ丸コpronw4'], 72)  # フォントの設定
         self.score_text = self.score_font.render(
             "トップ１００を表示", True, (0, 0, 0))  # テキストの設定
         self.score_text_rect = self.score_text.get_rect(

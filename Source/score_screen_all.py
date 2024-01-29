@@ -12,7 +12,7 @@ class ScoreScreenAll:
 
         # フォントの設定
         self.font = pygame.font.SysFont(
-            ['msgothic', 'Hiragino Maru Gothic Pro'], 60)
+            ['msgothic', 'ヒラキノ丸コpronw4'], 60)
 
         # トップ100のスコアを取得
         self.top_scores = self.get_top_scores()
