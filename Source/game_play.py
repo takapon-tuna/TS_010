@@ -92,7 +92,7 @@ class GamePlayScene:
                     self.score += points
                     # 雲を消したらHPを回復
                     if self.player.health <= 30:
-                        self.player.health += 1.75
+                        self.player.health += 2.0
                     break  # 1つのクリックで複数の雲は消せない
         elif event.type == pygame.KEYDOWN:  # キーダウンイベントの場合
             # if event.key == pygame.K_SPACE:  # スペースキーが押された場合
@@ -111,7 +111,7 @@ class GamePlayScene:
 
         # プレイヤーのHPが時間とともに減少するようにする
         if time.time() - self.last_health_decrease_time >= 1:
-            self.player.health -= 1
+            self.player.health -= 2
             self.last_health_decrease_time = time.time()
 
         # 雲の数値を更新
