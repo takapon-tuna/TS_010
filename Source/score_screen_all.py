@@ -58,33 +58,48 @@ class ScoreScreenAll:
         # 背景を描画
         self.screen.fill(self.background_color_t)
 
+        # スコアとプレイ時間の最大幅を取得
+        max_score_width = max(self.font.size(f"Score: {score['score']}")[
+                              0] for score in self.top_scores)
+        max_time_width = max(self.font.size(f"Play Time: {score['play_time']:.2f}秒")[
+                             0] for score in self.top_scores)
+
         # トップ100のスコアを描画
         for index, score_data in enumerate(self.top_scores[self.scroll_pos:self.scroll_pos + 20]):
+            # 順位を左端に寄せて描画
+            rank_text = f"{self.scroll_pos + index + 1}."
+            rank_rendered = self.font.render(rank_text, True, (255, 255, 255))
+            rank_rect = rank_rendered.get_rect(left=10, top=50 + index * 60)
+            self.screen.blit(rank_rendered, rank_rect)
+
             # 名前、スコア、時間を分けて描画
-            name_text = f"{self.scroll_pos + index + 1}. {score_data['name']}"
+            name_text = f"{score_data['name'][:16]}"  # 名前を16文字に制限
             score_text = f"Score: {score_data['score']}"
             time_text = f"Play Time: {score_data['play_time']:.2f}秒"
 
-            name_rendered = self.font.render(
-                name_text, True, (255, 255, 255))  # 文字色を白に設定
+            # 頭文字を左にそろえるための位置調整
+            name_rendered = self.font.render(name_text, True, (255, 255, 255))
             score_rendered = self.font.render(
-                score_text, True, (255, 255, 255))  # 文字色を白に設定
-            time_rendered = self.font.render(
-                time_text, True, (255, 255, 255))  # 文字色を白に設定
+                score_text, True, (255, 255, 255))
+            time_rendered = self.font.render(time_text, True, (255, 255, 255))
 
-            # テキストの位置を画面の中央に設定し、さらに下に下げる
+            # テキストの位置を順位の右隣に設定
             name_rect = name_rendered.get_rect(
-                center=(self.screen.get_width() // 6, 50 + index * 60))
+                left=rank_rect.right + 10, top=50 + index * 60)
+
+            # スコアのテキストを一定の位置に設定し、左側を揃える
             score_rect = score_rendered.get_rect(
-                center=(self.screen.get_width() // 2, 50 + index * 60))
+                left=self.screen.get_width() // 2 - max_score_width // 2, top=50 + index * 60)
+
+            # 時間のテキストを一定の位置に設定し、左側を揃える
             time_rect = time_rendered.get_rect(
-                center=(self.screen.get_width() * 5 // 6, 50 + index * 60))
+                left=self.screen.get_width() - max_time_width - 10, top=50 + index * 60)
 
             self.screen.blit(name_rendered, name_rect)
             self.screen.blit(score_rendered, score_rect)
             self.screen.blit(time_rendered, time_rect)
 
-            # 長方形の背景の Surface を作成
+        # 長方形の背景の Surface を作成
         prompt_surface = self.prompt_font.render(
             self.prompt_text, True, self.prompt_color)
         prompt_rect = prompt_surface.get_rect(
