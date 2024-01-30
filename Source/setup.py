@@ -1,6 +1,6 @@
 from cx_Freeze import setup, Executable
 
-build_exe_options = {"packages": ["httplib2", "socks"]}
+build_exe_options = {"packages": ["httplib2", "socks", "encodings"]}
 
 setup(
     name="My Python Script",
