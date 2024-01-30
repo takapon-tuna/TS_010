@@ -8,6 +8,8 @@ from cloud import Cloud
 from cryptography.fernet import Fernet
 from score_screen import ScoreScreen
 
+TRANSITION_SCREEN = pygame.USEREVENT + 1
+
 
 class GamePlayScene:
     def __init__(self, screen, firebase, auth):
@@ -154,7 +156,8 @@ class GamePlayScene:
             with open('data/score_data.json', 'w') as f:
                 json.dump({'score': self.score, 'play_time': play_time}, f)
 
-            return 'score_screen'  # ゲームオーバー時に'score_screen'を返す
+            # return 'score_screen'  # ゲームオーバー時に'score_screen'を返す
+            pygame.event.post(pygame.event.Event(TRANSITION_SCREEN))
 
     def draw(self):
         # 画面サイズを取得
