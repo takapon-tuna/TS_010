@@ -141,8 +141,8 @@ class GamePlayScene:
             self.score += self.streak_points
             self.streak_points = 0
 
-    # ゲームオーバーの条件をチェック
-        if self.player.health <= 0:
+           # ゲームオーバーの条件をチェック
+        if self.player.health <= 0 and not self.game_over:
             self.game_over = True  # ゲームオーバーフラグを立てる
             player_name = self.decrypt_player_name()  # プレイヤー名を復号化
             play_time = time.time() - self.start_time  # プレイ時間を計算
@@ -153,6 +153,8 @@ class GamePlayScene:
             # スコアとプレイ時間を JSON ファイルに出力
             with open('data/score_data.json', 'w') as f:
                 json.dump({'score': self.score, 'play_time': play_time}, f)
+
+            return 'score_screen'  # ゲームオーバー時に'score_screen'を返す
 
     def draw(self):
         # 画面サイズを取得
