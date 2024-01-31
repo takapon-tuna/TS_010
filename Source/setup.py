@@ -1,6 +1,10 @@
+import sys
 from cx_Freeze import setup, Executable
 
-build_exe_options = {"packages": ["httplib2", "socks", "encodings"]}
+build_exe_options = {
+    "packages": ["httplib2", "socks", "encodings"],
+    "include_files": [sys.prefix + "/lib/encodings"]
+}
 
 setup(
     name="My Python Script",
